@@ -7,27 +7,42 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
+using static drummeur.linkablecolors.Settings.LinkableColorsSettings;
+
 namespace drummeur.linkablecolors
 {
     // todo: color picker for all these colors
 
     [StaticConstructorOnStartup]
-    class LinkableColors
+    class LinkableColorsPatches
     {
         internal static Material GreenLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, ShaderDatabase.SolidColor, Color.green);
         internal static Material RedLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, ShaderDatabase.SolidColor, Color.red);
         internal static Material BlueLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, ShaderDatabase.SolidColor, Color.blue);
         internal static Material YellowLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, ShaderDatabase.SolidColor, Color.yellow);
 
-        internal static FieldInfo GreenLine = AccessTools.Field(typeof(LinkableColors), nameof(GreenLineMat));
-        internal static FieldInfo RedLine = AccessTools.Field(typeof(LinkableColors), nameof(RedLineMat));
-        internal static FieldInfo BlueLine = AccessTools.Field(typeof(LinkableColors), nameof(BlueLineMat));
-        internal static FieldInfo YellowLine = AccessTools.Field(typeof(LinkableColors), nameof(YellowLineMat));
+        internal static FieldInfo GreenLine = AccessTools.Field(typeof(LinkableColorsPatches), nameof(GreenLineMat));
+        internal static FieldInfo RedLine = AccessTools.Field(typeof(LinkableColorsPatches), nameof(RedLineMat));
+        internal static FieldInfo BlueLine = AccessTools.Field(typeof(LinkableColorsPatches), nameof(BlueLineMat));
+        internal static FieldInfo YellowLine = AccessTools.Field(typeof(LinkableColorsPatches), nameof(YellowLineMat));
 
         internal static MethodInfo DrawLineBetween2adic = AccessTools.Method(typeof(GenDraw), nameof(GenDraw.DrawLineBetween), new Type[] { typeof(Vector3), typeof(Vector3) });
         internal static MethodInfo DrawLineBetween3adic = AccessTools.Method(typeof(GenDraw), nameof(GenDraw.DrawLineBetween), new Type[] { typeof(Vector3), typeof(Vector3), typeof(Material) });
 
-        static LinkableColors()
+        internal static Shader shader = UseSolidLineShader ? ShaderDatabase.SolidColor : ShaderDatabase.Transparent;
+
+        internal static Material ActiveLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, Colors[ActiveColorLabel]);
+        internal static Material InactiveLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, Colors[InactiveColorLabel]);
+        internal static Material PotentialLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, Colors[PotentialColorLabel]);
+        internal static Material SupplantedLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, Colors[SupplantedColorLabel]);
+
+
+        internal static FieldInfo ActiveLine = AccessTools.Field(typeof(LinkableColorsPatches), nameof(ActiveLineMat));
+        internal static FieldInfo InactiveLine = AccessTools.Field(typeof(LinkableColorsPatches), nameof(InactiveLineMat));
+        internal static FieldInfo PotentialLine = AccessTools.Field(typeof(LinkableColorsPatches), nameof(PotentialLineMat));
+        internal static FieldInfo SupplantedLine = AccessTools.Field(typeof(LinkableColorsPatches), nameof(SupplantedLineMat));
+
+        static LinkableColorsPatches()
         {
             var harmony = new Harmony("drummeur.linkablecolors");
             harmony.PatchAll();
@@ -35,20 +50,24 @@ namespace drummeur.linkablecolors
 
         internal static IEnumerable<CodeInstruction> PatchPostDrawExtraSectionOverlays(IEnumerable<CodeInstruction> source)
         {
+
+
             foreach (var op in source)
             {
                 // intercept the call to the 2adic DrawnLineBetween methods
                 // load the appropriate color and then call the 3adic method
                 if (op.opcode == OpCodes.Call && op.operand as MethodInfo == DrawLineBetween2adic)
                 {
-                    yield return new CodeInstruction(OpCodes.Ldsfld, GreenLine);
+                    //yield return new CodeInstruction(OpCodes.Ldsfld, GreenLine);
+                    yield return new CodeInstruction(OpCodes.Ldsfld, ActiveLine);
                     yield return new CodeInstruction(OpCodes.Call, DrawLineBetween3adic);
                 }
                 // the only Ldsfld is the one we want to intercept, so we don't need to check the operand
                 // load our own field instead of the original one
                 else if (op.opcode == OpCodes.Ldsfld)
                 {
-                    yield return new CodeInstruction(OpCodes.Ldsfld, RedLine);
+                    //yield return new CodeInstruction(OpCodes.Ldsfld, RedLine);
+                    yield return new CodeInstruction(OpCodes.Ldsfld, InactiveLine);
                 }
                 // otherwise, we're good to go!
                 else
@@ -68,7 +87,8 @@ namespace drummeur.linkablecolors
                 if (op.opcode == OpCodes.Call && op.operand as MethodInfo == DrawLineBetween2adic)
                 {
                     // load the potential link Material
-                    yield return new CodeInstruction(OpCodes.Ldsfld, BlueLine);
+                    //yield return new CodeInstruction(OpCodes.Ldsfld, BlueLine);
+                    yield return new CodeInstruction(OpCodes.Ldsfld, PotentialLine);
 
                     // call DrawLineBetween(UnityEngine.Vector3, UnityEngine.Vector3, UnityEngine.Material)
                     yield return new CodeInstruction(OpCodes.Call, DrawLineBetween3adic);
@@ -87,7 +107,7 @@ namespace drummeur.linkablecolors
     {
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> source)
         {
-            return LinkableColors.PatchPostDrawExtraSectionOverlays(source);
+            return LinkableColorsPatches.PatchPostDrawExtraSectionOverlays(source);
         }
     }
 
@@ -96,7 +116,7 @@ namespace drummeur.linkablecolors
     {
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> source)
         {
-            return LinkableColors.PatchPostDrawExtraSectionOverlays(source);
+            return LinkableColorsPatches.PatchPostDrawExtraSectionOverlays(source);
         }
     }
 
@@ -105,7 +125,7 @@ namespace drummeur.linkablecolors
     {
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> source)
         {
-            return LinkableColors.PatchDrawLinesToPotentialThingsToLinkTo(source);
+            return LinkableColorsPatches.PatchDrawLinesToPotentialThingsToLinkTo(source);
         }
     }
 
@@ -114,7 +134,7 @@ namespace drummeur.linkablecolors
     {
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> source)
         {
-            return LinkableColors.PatchDrawLinesToPotentialThingsToLinkTo(source);
+            return LinkableColorsPatches.PatchDrawLinesToPotentialThingsToLinkTo(source);
         }
     }
 
@@ -122,13 +142,21 @@ namespace drummeur.linkablecolors
     [HarmonyPatch(typeof(CompAffectedByFacilities), nameof(CompAffectedByFacilities.DrawRedLineToPotentiallySupplantedFacility))]
     public static class CompAffectedByFacilities_DrawRedLineToPotentiallSupplantedFacility
     {
+        internal static Shader shader = UseSolidLineShader ? ShaderDatabase.SolidColor : ShaderDatabase.Transparent;
+
+        internal static Material SupplantedLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, Colors[SupplantedColorLabel]);
+
+        internal static FieldInfo SupplantedLine = AccessTools.Field(typeof(LinkableColorsPatches), nameof(SupplantedLineMat));
+
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> source)
-        {
+        { 
+
             foreach (var op in source)
             {
                 if (op.opcode == OpCodes.Ldsfld)
                 {
-                    yield return new CodeInstruction(OpCodes.Ldsfld, LinkableColors.YellowLine);
+                    //yield return new CodeInstruction(OpCodes.Ldsfld, LinkableColorsPatches.YellowLine);
+                    yield return new CodeInstruction(OpCodes.Ldsfld, SupplantedLine);
                 }
                 else
                 {
