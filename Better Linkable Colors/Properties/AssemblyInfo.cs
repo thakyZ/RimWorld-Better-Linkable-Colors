@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Better Linkable Colors")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A RimWorld mod to make the lines drawn between linkable buildings easier to see.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Better Linkable Colors")]
-[assembly: AssemblyCopyright("Copyright ©  2021")]
+[assembly: AssemblyCopyright("Copyright © 2021 drummeur")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
