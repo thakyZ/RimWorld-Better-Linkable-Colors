@@ -139,8 +139,9 @@ namespace drummeur.linkablecolors
     }
 
     // yeah, well, it's going to be a yellow line now...
+    [StaticConstructorOnStartup]
     [HarmonyPatch(typeof(CompAffectedByFacilities), nameof(CompAffectedByFacilities.DrawRedLineToPotentiallySupplantedFacility))]
-    public static class CompAffectedByFacilities_DrawRedLineToPotentiallSupplantedFacility
+    public static class CompAffectedByFacilities_DrawRedLineToPotentiallSupplantedFacility_Patch
     {
         internal static Shader shader = UseSolidLineShader ? ShaderDatabase.SolidColor : ShaderDatabase.Transparent;
 
