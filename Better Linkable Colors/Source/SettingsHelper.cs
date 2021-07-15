@@ -43,6 +43,32 @@ namespace drummeur.linkablecolors
             ls.Gap(ls.verticalSpacing);
         }
 
+        public static void SliderLabeledSettable(this Listing_Standard ls, string label, ref float val, ref string buffer, Func<float, string> formatter, float min = 0f, float max = 1f, string tooltip = null)
+        {
+            Rect rect = ls.GetRect(Text.LineHeight);
+            Rect rect2 = rect.LeftPart(.70f).Rounded();
+            Rect rect3 = rect.RightPart(.30f).Rounded().LeftPart(.67f).Rounded();
+            Rect rect4 = rect.RightPart(.10f).Rounded();
+
+            TextAnchor anchor = Text.Anchor;
+            Text.Anchor = TextAnchor.MiddleLeft;
+            Widgets.Label(rect2, label);
+
+            float result = Widgets.HorizontalSlider(rect3, val, min, max, true);
+            val = result;
+            Text.Anchor = TextAnchor.MiddleRight;
+
+            ls.TextFieldNumeric(ref val, ref buffer, min, max);
+            //Widgets.Label(rect4, formatter(val));
+            if (!tooltip.NullOrEmpty())
+            {
+                TooltipHandler.TipRegion(rect, tooltip);
+            }
+
+            Text.Anchor = anchor;
+            ls.Gap(ls.verticalSpacing);
+        }
+
         public static void FloatRange(this Listing_Standard ls, string label, ref FloatRange range, float min = 0f, float max = 1f, string tooltip = null, ToStringStyle valueStyle = ToStringStyle.FloatTwo)
         {
             Rect rect = ls.GetRect(Text.LineHeight);

@@ -47,14 +47,16 @@ namespace drummeur.linkablecolors
             public static ColorLabel PotentialColorLabel = ColorLabel.BLUE;
             public static ColorLabel SupplantedColorLabel = ColorLabel.YELLOW;
 
+            public static float LineThickness = 0.2f;
+
+            private static string LineThicknessBuffer;
+
             public static float Xoffset = -14;
             public static float Yoffset = 102.75f;
             public static float checkboxOffset = -190f;
 
             public void DoWindowContents(Rect rect)
             {
-
-                
                 Listing_Standard options = new Listing_Standard();
                 Color defaultColor = GUI.color;
 
@@ -73,10 +75,26 @@ namespace drummeur.linkablecolors
 
                 options.Gap();
 
-                options.Label("All changes currently require a restart to take effect.");
-
                 options.ColumnWidth = rect.width / 2 + checkboxOffset;
+
+                if (VersionControl.CurrentMinor >= 3)
+                {
+                    options.TextFieldNumericLabeled("Line Thickness      ", ref LineThickness, ref LineThicknessBuffer, 0);
+                }
+                else
+                {
+                    options.ColumnWidth = defaultWidth;
+                    options.Label("All changes require a restart to take effect.");
+                    options.ColumnWidth = rect.width / 2 + checkboxOffset;
+                }
+
                 options.CheckboxLabeled("Use Solid Colors for Line Shader", ref UseSolidLineShader);
+
+                //options.ColumnWidth = defaultWidth / 3;
+
+                //options.SliderLabeledSettable("Line Thickness", ref LineThickness, ref LineThicknessBuffer, el => el.ToString("F3"), 0, 1);
+
+
                 options.ColumnWidth = defaultWidth;
 
                 options.GapLine();
@@ -89,6 +107,11 @@ namespace drummeur.linkablecolors
                 options.ColumnWidth = defaultWidth; 
                 
                 options.GapLine();
+
+                if (VersionControl.CurrentMinor >= 3)
+                {
+                    options.Label("All changes require a restart to take effect.");
+                }
 
                 //options.Gap(100);
                 //options.SliderLabeled("OffsetX", ref Xoffset, el => Math.Round(el, 2).ToString(), -100, -14);
@@ -118,7 +141,7 @@ namespace drummeur.linkablecolors
                 options.AddLabeledRadioList("Overridden Link Color", Enum.GetValues(typeof(ColorLabel)).Cast<ColorLabel>(), ref SupplantedColorLabel, el => el.ToString().ToLower());
                 //options.GapLine();
 
-                //options.ColumnWidth = defaultWidth;
+                options.ColumnWidth = defaultWidth;
 
                 options.End();
 
@@ -132,6 +155,8 @@ namespace drummeur.linkablecolors
                 Scribe_Values.Look(ref InactiveColorLabel, "linkablecolors_inactivecolor", ColorLabel.RED);
                 Scribe_Values.Look(ref PotentialColorLabel, "linkablecolors_potentialcolor", ColorLabel.BLUE);
                 Scribe_Values.Look(ref SupplantedColorLabel, "linkablecolors_supplantedcolor", ColorLabel.YELLOW);
+
+                Scribe_Values.Look(ref LineThickness, "linkablecolors_linethickness", 0.2f);
             }
         }
 

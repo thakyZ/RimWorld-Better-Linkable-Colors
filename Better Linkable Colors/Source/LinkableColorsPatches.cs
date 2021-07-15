@@ -16,18 +16,13 @@ namespace drummeur.linkablecolors
     [StaticConstructorOnStartup]
     class LinkableColorsPatches
     {
-        internal static Material GreenLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, ShaderDatabase.SolidColor, Color.green);
-        internal static Material RedLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, ShaderDatabase.SolidColor, Color.red);
-        internal static Material BlueLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, ShaderDatabase.SolidColor, Color.blue);
-        internal static Material YellowLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, ShaderDatabase.SolidColor, Color.yellow);
-
-        internal static FieldInfo GreenLine = AccessTools.Field(typeof(LinkableColorsPatches), nameof(GreenLineMat));
-        internal static FieldInfo RedLine = AccessTools.Field(typeof(LinkableColorsPatches), nameof(RedLineMat));
-        internal static FieldInfo BlueLine = AccessTools.Field(typeof(LinkableColorsPatches), nameof(BlueLineMat));
-        internal static FieldInfo YellowLine = AccessTools.Field(typeof(LinkableColorsPatches), nameof(YellowLineMat));
-
         internal static MethodInfo DrawLineBetween2adic = AccessTools.Method(typeof(GenDraw), nameof(GenDraw.DrawLineBetween), new Type[] { typeof(Vector3), typeof(Vector3) });
-        internal static MethodInfo DrawLineBetween3adic = AccessTools.Method(typeof(GenDraw), nameof(GenDraw.DrawLineBetween), new Type[] { typeof(Vector3), typeof(Vector3), typeof(Material) });
+
+        // 1.3 changed the signature of GenDraw.DrawLineBetween to add an optional float argument for line thickness
+        internal static MethodInfo DrawLineBetween3adic = VersionControl.CurrentMinor >= 3 ?
+            AccessTools.Method(typeof(GenDraw), nameof(GenDraw.DrawLineBetween), new Type[] { typeof(Vector3), typeof(Vector3), typeof(Material), typeof(float) }) :
+            AccessTools.Method(typeof(GenDraw), nameof(GenDraw.DrawLineBetween), new Type[] { typeof(Vector3), typeof(Vector3), typeof(Material) });
+
 
         internal static Shader shader = UseSolidLineShader ? ShaderDatabase.SolidColor : ShaderDatabase.Transparent;
 
@@ -49,9 +44,7 @@ namespace drummeur.linkablecolors
         }
 
         internal static IEnumerable<CodeInstruction> PatchPostDrawExtraSectionOverlays(IEnumerable<CodeInstruction> source)
-        {
-
-
+        {         
             foreach (var op in source)
             {
                 // intercept the call to the 2adic DrawnLineBetween methods
@@ -60,6 +53,12 @@ namespace drummeur.linkablecolors
                 {
                     //yield return new CodeInstruction(OpCodes.Ldsfld, GreenLine);
                     yield return new CodeInstruction(OpCodes.Ldsfld, ActiveLine);
+
+                    if (VersionControl.CurrentMinor >= 3)
+                    {
+                        yield return new CodeInstruction(OpCodes.Ldc_R4, LineThickness);
+                    }
+
                     yield return new CodeInstruction(OpCodes.Call, DrawLineBetween3adic);
                 }
                 // the only Ldsfld is the one we want to intercept, so we don't need to check the operand
@@ -68,6 +67,11 @@ namespace drummeur.linkablecolors
                 {
                     //yield return new CodeInstruction(OpCodes.Ldsfld, RedLine);
                     yield return new CodeInstruction(OpCodes.Ldsfld, InactiveLine);
+                }
+                // make sure we use the correct line thickness
+                else if (op.opcode == OpCodes.Ldc_R4)
+                {
+                    yield return new CodeInstruction(OpCodes.Ldc_R4, LineThickness);
                 }
                 // otherwise, we're good to go!
                 else
@@ -91,6 +95,11 @@ namespace drummeur.linkablecolors
                     yield return new CodeInstruction(OpCodes.Ldsfld, PotentialLine);
 
                     // call DrawLineBetween(UnityEngine.Vector3, UnityEngine.Vector3, UnityEngine.Material)
+                    if (VersionControl.CurrentMinor >= 3)
+                    {
+                        yield return new CodeInstruction(OpCodes.Ldc_R4, LineThickness);
+                    }
+
                     yield return new CodeInstruction(OpCodes.Call, DrawLineBetween3adic);
                 }
                 // fine to go
@@ -150,7 +159,7 @@ namespace drummeur.linkablecolors
         internal static FieldInfo SupplantedLine = AccessTools.Field(typeof(LinkableColorsPatches), nameof(SupplantedLineMat));
 
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> source)
-        { 
+        {
 
             foreach (var op in source)
             {
@@ -158,6 +167,10 @@ namespace drummeur.linkablecolors
                 {
                     //yield return new CodeInstruction(OpCodes.Ldsfld, LinkableColorsPatches.YellowLine);
                     yield return new CodeInstruction(OpCodes.Ldsfld, SupplantedLine);
+                }
+                else if (op.opcode == OpCodes.Ldc_R4)
+                {
+                    yield return new CodeInstruction(OpCodes.Ldc_R4, LineThickness);
                 }
                 else
                 {
