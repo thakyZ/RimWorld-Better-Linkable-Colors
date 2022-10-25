@@ -7,6 +7,8 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
+using drummeur.linkablecolors.Util;
+
 using static drummeur.linkablecolors.Settings.LinkableColorsSettings;
 
 namespace drummeur.linkablecolors
@@ -26,10 +28,15 @@ namespace drummeur.linkablecolors
 
         internal static Shader shader = UseSolidLineShader ? ShaderDatabase.SolidColor : ShaderDatabase.Transparent;
 
-        internal static Material ActiveLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, Colors[ActiveColorLabel]);
-        internal static Material InactiveLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, Colors[InactiveColorLabel]);
-        internal static Material PotentialLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, Colors[PotentialColorLabel]);
-        internal static Material SupplantedLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, Colors[SupplantedColorLabel]);
+        //internal static Material ActiveLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, Colors[ActiveColorLabel]);
+        //internal static Material InactiveLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, Colors[InactiveColorLabel]);
+        //internal static Material PotentialLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, Colors[PotentialColorLabel]);
+        //internal static Material SupplantedLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, Colors[SupplantedColorLabel]);
+
+        internal static Material ActiveLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, ColorHelper.ColorFromRgbString(ActiveColorString) ?? ColorHelper.Defaults.ActiveColor);
+        internal static Material InactiveLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, ColorHelper.ColorFromRgbString(InactiveColorString) ?? ColorHelper.Defaults.InactiveColor);
+        internal static Material PotentialLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, ColorHelper.ColorFromRgbString(PotentialColorString) ?? ColorHelper.Defaults.PotentialColor);
+        internal static Material SupplantedLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, ColorHelper.ColorFromRgbString(SupplantedColorString) ?? ColorHelper.Defaults.SupplantedColor);
 
 
         internal static FieldInfo ActiveLine = AccessTools.Field(typeof(LinkableColorsPatches), nameof(ActiveLineMat));
@@ -154,7 +161,7 @@ namespace drummeur.linkablecolors
     {
         internal static Shader shader = UseSolidLineShader ? ShaderDatabase.SolidColor : ShaderDatabase.Transparent;
 
-        internal static Material SupplantedLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, Colors[SupplantedColorLabel]);
+        internal static Material SupplantedLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, ColorHelper.ColorFromRgbString(SupplantedColorString) ?? ColorHelper.Defaults.SupplantedColor);
 
         internal static FieldInfo SupplantedLine = AccessTools.Field(typeof(LinkableColorsPatches), nameof(SupplantedLineMat));
 
