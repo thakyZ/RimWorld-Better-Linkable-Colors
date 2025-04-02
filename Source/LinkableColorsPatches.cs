@@ -18,12 +18,12 @@ namespace drummeur.linkablecolors;
 [StaticConstructorOnStartup]
 class LinkableColorsPatches
 {
-    internal static MethodInfo DrawLineBetween2adic = AccessTools.Method(typeof(GenDraw), nameof(GenDraw.DrawLineBetween), new Type[] { typeof(Vector3), typeof(Vector3) });
+    internal static MethodInfo DrawLineBetween2adic = AccessTools.Method(typeof(GenDraw), nameof(GenDraw.DrawLineBetween), [typeof(Vector3), typeof(Vector3)]);
 
     // 1.3 changed the signature of GenDraw.DrawLineBetween to add an optional float argument for line thickness
     internal static MethodInfo DrawLineBetween3adic = VersionControl.CurrentMinor >= 3 ?
-        AccessTools.Method(typeof(GenDraw), nameof(GenDraw.DrawLineBetween), new Type[] { typeof(Vector3), typeof(Vector3), typeof(Material), typeof(float) }) :
-        AccessTools.Method(typeof(GenDraw), nameof(GenDraw.DrawLineBetween), new Type[] { typeof(Vector3), typeof(Vector3), typeof(Material) });
+        AccessTools.Method(typeof(GenDraw), nameof(GenDraw.DrawLineBetween), [typeof(Vector3), typeof(Vector3), typeof(Material), typeof(float)]) :
+        AccessTools.Method(typeof(GenDraw), nameof(GenDraw.DrawLineBetween), [typeof(Vector3), typeof(Vector3), typeof(Material)]);
 
     internal static Shader shader = UseSolidLineShader ? ShaderDatabase.SolidColor : ShaderDatabase.Transparent;
 
