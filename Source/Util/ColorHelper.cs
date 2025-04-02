@@ -5,34 +5,33 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace drummeur.linkablecolors.Util
+namespace drummeur.linkablecolors.Util;
+
+internal static class ColorHelper
 {
-    internal static class ColorHelper
+    internal static Color? ColorFromRgbString(string str)
     {
-        internal static Color? ColorFromRgbString(string str)
+        if (ColorUtility.TryParseHtmlString(str, out Color color))
         {
-            if (ColorUtility.TryParseHtmlString(str, out Color color))
-            {
-                return color;
-            }
-            else
-            {
-                return null;
-            }            
+            return color;
         }
-
-        internal static string ToHtmlString(this Color color)
+        else
         {
-            return string.Concat("#", ColorUtility.ToHtmlStringRGB(color));
-        }
-
-        internal static class Defaults
-        {
-            internal static Color ActiveColor = Color.green;
-            internal static Color InactiveColor = Color.red;
-            internal static Color PotentialColor = Color.blue;
-            internal static Color SupplantedColor = Color.yellow;
-        }
-
+            return null;
+        }            
     }
+
+    internal static string ToHtmlString(this Color color)
+    {
+        return string.Concat("#", ColorUtility.ToHtmlStringRGB(color));
+    }
+
+    internal static class Defaults
+    {
+        internal static Color ActiveColor = Color.green;
+        internal static Color InactiveColor = Color.red;
+        internal static Color PotentialColor = Color.blue;
+        internal static Color SupplantedColor = Color.yellow;
+    }
+
 }
