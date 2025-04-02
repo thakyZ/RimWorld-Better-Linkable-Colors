@@ -18,6 +18,7 @@
     <PackageReference Include="Lib.Harmony" Version="2.3.5" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="..\$(Configuration)\Assemblies\" />
     <None Include="..\About\About.xml" Link="About\About.xml" />
     <EditorConfigFiles Include=".editorconfig" />
     <None Include=".editorconfig" />
