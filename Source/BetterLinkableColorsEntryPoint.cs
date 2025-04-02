@@ -1,23 +1,21 @@
 ﻿using UnityEngine;
-
 using Verse;
 
 namespace drummeur.linkablecolors;
 
-partial class Settings
+public class BetterLinkableColorsEntryPoint : Mod
 {
-    public class LinkableColors : Mod
+    internal LinkableColorsSettings Settings { get; }
+
+    public LinkableColors(ModContentPack content) : base(content)
     {
-        public LinkableColors(ModContentPack content) : base(content)
-        {
-            GetSettings<LinkableColorsSettings>();
-        }
+        this.Settings = GetSettings<LinkableColorsSettings>();
+    }
 
-        public override string SettingsCategory() => "Better Linkable Colors";
+    public override string SettingsCategory() => "Better Linkable Colors";
 
-        public override void DoSettingsWindowContents(Rect inRect)
-        {
-            GetSettings<LinkableColorsSettings>().DoWindowContents(inRect);
-        }
+    public override void DoSettingsWindowContents(Rect inRect)
+    {
+        this.Settings.DoWindowContents(inRect);
     }
 }
