@@ -1,20 +1,26 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31313.79
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Better Linkable Colors", "Source\Better Linkable Colors.csproj", "{CFC36D75-183F-4900-812F-E086F99244E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
+		1.2|Any CPU = 1.2|Any CPU
+		1.3|Any CPU = 1.3|Any CPU
+		1.4|Any CPU = 1.4|Any CPU
+		1.5|Any CPU = 1.5|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CFC36D75-183F-4900-812F-E086F99244E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CFC36D75-183F-4900-812F-E086F99244E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CFC36D75-183F-4900-812F-E086F99244E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CFC36D75-183F-4900-812F-E086F99244E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFC36D75-183F-4900-812F-E086F99244E3}.1.2|Any CPU.ActiveCfg = Release|Any CPU
+		{CFC36D75-183F-4900-812F-E086F99244E3}.1.2|Any CPU.Build.0 = Release|Any CPU
+		{CFC36D75-183F-4900-812F-E086F99244E3}.1.3|Any CPU.ActiveCfg = Release|Any CPU
+		{CFC36D75-183F-4900-812F-E086F99244E3}.1.3|Any CPU.Build.0 = Release|Any CPU
+		{CFC36D75-183F-4900-812F-E086F99244E3}.1.4|Any CPU.ActiveCfg = Release|Any CPU
+		{CFC36D75-183F-4900-812F-E086F99244E3}.1.4|Any CPU.Build.0 = Release|Any CPU
+		{CFC36D75-183F-4900-812F-E086F99244E3}.1.5|Any CPU.ActiveCfg = Release|Any CPU
+		{CFC36D75-183F-4900-812F-E086F99244E3}.1.5|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
