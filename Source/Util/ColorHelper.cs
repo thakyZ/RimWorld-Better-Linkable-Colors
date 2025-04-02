@@ -11,9 +11,7 @@ internal static class ColorHelper
 {
     internal static Color? ColorFromRgbString(string str)
     {
-        if (ColorUtility.TryParseHtmlString(str, out Color color))
-        {
-            return color;
+        return ColorUtility.TryParseHtmlString(str, out Color color) ? color : null;
         }
         else
         {
