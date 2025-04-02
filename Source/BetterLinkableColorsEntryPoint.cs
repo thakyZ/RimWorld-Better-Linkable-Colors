@@ -7,7 +7,7 @@ public class BetterLinkableColorsEntryPoint : Mod
 {
     internal LinkableColorsSettings Settings { get; }
 
-    public LinkableColors(ModContentPack content) : base(content)
+    public BetterLinkableColorsEntryPoint(ModContentPack content) : base(content)
     {
         this.Settings = GetSettings<LinkableColorsSettings>();
     }
