@@ -12,11 +12,6 @@ internal static class ColorHelper
     internal static Color? ColorFromRgbString(string str)
     {
         return ColorUtility.TryParseHtmlString(str, out Color color) ? color : null;
-        }
-        else
-        {
-            return null;
-        }
     }
 
     internal static string ToHtmlString(this Color color)
@@ -26,9 +21,9 @@ internal static class ColorHelper
 
     internal static class Defaults
     {
-        internal static Color ActiveColor = Color.green;
-        internal static Color InactiveColor = Color.red;
-        internal static Color PotentialColor = Color.blue;
-        internal static Color SupplantedColor = Color.yellow;
+        internal static readonly Color ActiveColor = Color.green;
+        internal static readonly Color InactiveColor = Color.red;
+        internal static readonly Color PotentialColor = Color.blue;
+        internal static readonly Color SupplantedColor = Color.yellow;
     }
 }
