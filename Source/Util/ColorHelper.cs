@@ -21,7 +21,7 @@ internal static class ColorHelper
 
     internal static string ToHtmlString(this Color color)
     {
-        return string.Concat("#", ColorUtility.ToHtmlStringRGB(color));
+        return $"#{ColorUtility.ToHtmlStringRGB(color)}";
     }
 
     internal static class Defaults
