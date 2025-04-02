@@ -10,6 +10,12 @@
     <OutputPath>..\$(Configuration)\Assemblies\</OutputPath>
     <Configurations>1.2;1.3;1.4;1.5</Configurations>
   </PropertyGroup>
+  <PropertyGroup>
+    <DefineConstants Condition="'$(Configuration)'=='1.5'">$(DefineConstants);RIMWORLD_15;RIMWORLD_15_OR_LESS;RIMWORLD_15_OR_GREATER;RIMWORLD_14_OR_GREATER;RIMWORLD_13_OR_GREATER;RIMWORLD_12_OR_GREATER</DefineConstants>
+    <DefineConstants Condition="'$(Configuration)'=='1.4'">$(DefineConstants);RIMWORLD_14;RIMWORLD_15_OR_LESS;RIMWORLD_14_OR_LESS;RIMWORLD_14_OR_GREATER;RIMWORLD_13_OR_GREATER;RIMWORLD_12_OR_GREATER</DefineConstants>
+    <DefineConstants Condition="'$(Configuration)'=='1.3'">$(DefineConstants);RIMWORLD_13;RIMWORLD_15_OR_LESS;RIMWORLD_14_OR_LESS;RIMWORLD_13_OR_LESS;RIMWORLD_13_OR_GREATER;RIMWORLD_12_OR_GREATER</DefineConstants>
+    <DefineConstants Condition="'$(Configuration)'=='1.2'">$(DefineConstants);RIMWORLD_12;RIMWORLD_15_OR_LESS;RIMWORLD_14_OR_LESS;RIMWORLD_13_OR_LESS;RIMWORLD_12_OR_LESS;RIMWORLD_12_OR_GREATER</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Condition="'$(Configuration)'=='1.5'" Include="Krafs.Rimworld.Ref" Version="1.5.*" />
     <PackageReference Condition="'$(Configuration)'=='1.4'" Include="Krafs.Rimworld.Ref" Version="1.4.*" />
