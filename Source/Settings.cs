@@ -35,34 +35,34 @@ public class LinkableColorsSettings : ModSettings
 
     public static float LineThickness = 0.2f;
 
-    private static string LineThicknessBuffer;
+    private static string? LineThicknessBuffer;
 
-    public static float Xoffset = -14;
-    public static float Yoffset = 102.75f;
-    public static float checkboxOffset = -190f;
+    public static float XOffset = -14;
+    public static float YOffset = 102.75f;
+    public static float CheckBoxOffset = -190f;
 
     //public void DoWindowContents(Rect rect)
     //{
     //    Listing_Standard options = new Listing_Standard();
     //    Color defaultColor = GUI.color;
-
+    //
     //    options.Begin(rect);
-
+    //
     //    Text.Font = GameFont.Medium;
     //    Text.Anchor = TextAnchor.MiddleCenter;
     //    GUI.color = Color.yellow;
-    //    options.Label("Better Linkable Colors Settings");
+    //    _ = options.Label("Better Linkable Colors Settings");
     //    GUI.color = defaultColor;
-
+    //
     //    Text.Font = GameFont.Small;
     //    Text.Anchor = TextAnchor.UpperLeft;
-
+    //
     //    var defaultWidth = options.ColumnWidth;
-
+    //
     //    options.Gap();
-
+    //
     //    options.ColumnWidth = rect.width / 2 + checkboxOffset;
-
+    //
     //    if (VersionControl.CurrentMinor >= 3)
     //    {
     //        options.TextFieldNumericLabeled("Line Thickness      ", ref LineThickness, ref LineThicknessBuffer, 0);
@@ -70,63 +70,63 @@ public class LinkableColorsSettings : ModSettings
     //    else
     //    {
     //        options.ColumnWidth = defaultWidth;
-    //        options.Label("All changes require a restart to take effect.");
+    //        _ = options.Label("All changes require a restart to take effect.");
     //        options.ColumnWidth = rect.width / 2 + checkboxOffset;
     //    }
-
+    //
     //    options.CheckboxLabeled("Use Solid Colors for Line Shader", ref UseSolidLineShader);
-
+    //
     //    //options.ColumnWidth = defaultWidth / 3;
-
+    //
     //    //options.SliderLabeledSettable("Line Thickness", ref LineThickness, ref LineThicknessBuffer, el => el.ToString("F3"), 0, 1);
-
+    //
     //    options.ColumnWidth = defaultWidth;
-
+    //
     //    options.GapLine();
-
+    //
     //    options.ColumnWidth = rect.width / 4 + Xoffset;
-
+    //
     //    options.AddLabeledRadioList("Active Link Color", Enum.GetValues(typeof(ColorLabel)).Cast<ColorLabel>(), ref ActiveColorLabel, el => el.ToString().ToLower());
-
+    //
     //    options.ColumnWidth = defaultWidth;
-
+    //
     //    options.GapLine();
-
+    //
     //    if (VersionControl.CurrentMinor >= 3)
     //    {
-    //        options.Label("All changes require a restart to take effect.");
+    //        _ = options.Label("All changes require a restart to take effect.");
     //    }
-
+    //
     //    //options.Gap(100);
     //    //options.SliderLabeled("OffsetX", ref Xoffset, el => Math.Round(el, 2).ToString(), -100, -14);
     //    //options.SliderLabeled("OffsetY", ref Yoffset, el => Math.Round(el, 2).ToString(), 90, 120);
     //    //options.SliderLabeled("cbxOffset", ref checkboxOffset, el => Math.Round(el, 2).ToString(), -500, 10);
     //    options.ColumnWidth = rect.width / 4 + Xoffset;
-
+    //
     //    options.NewColumn();
     //    options.Gap(Yoffset);
-
+    //
     //    options.AddLabeledRadioList("Inactive Link Color", Enum.GetValues(typeof(ColorLabel)).Cast<ColorLabel>(), ref InactiveColorLabel, el => el.ToString().ToLower());
-
+    //
     //    //options.ColumnWidth = defaultWidth;
     //    //options.GapLine();
-
+    //
     //    //options.ColumnWidth = rect.width / 4 + Xoffset;
-
+    //
     //    options.NewColumn();
     //    options.Gap(Yoffset);
-
+    //
     //    options.AddLabeledRadioList("Potential Link Color", Enum.GetValues(typeof(ColorLabel)).Cast<ColorLabel>(), ref PotentialColorLabel, el => el.ToString().ToLower());
     //    //options.GapLine();
-
+    //
     //    options.NewColumn();
     //    options.Gap(Yoffset);
-
+    //
     //    options.AddLabeledRadioList("Overridden Link Color", Enum.GetValues(typeof(ColorLabel)).Cast<ColorLabel>(), ref SupplantedColorLabel, el => el.ToString().ToLower());
     //    //options.GapLine();
-
+    //
     //    options.ColumnWidth = defaultWidth;
-
+    //
     //    options.End();
     //}
 
@@ -141,9 +141,12 @@ public class LinkableColorsSettings : ModSettings
         Text.Anchor = TextAnchor.MiddleCenter;
         GUI.color = Color.yellow;
 
-        options.Label("Better Linkable Colors Settings");
-        options.SubLabel("All changes require a restart to take effect", 1f);
-
+        _ = options.Label("Better Linkable Colors Settings");
+#if RIMWORLD_14_OR_GREATER
+        _ = options.SubLabel("All changes require a restart to take effect", 1f);
+#else
+        _ = options.Label("All changes require a restart to take effect", 1f);
+#endif
         GUI.color = defaultColor;
 
         Text.Font = GameFont.Small;
@@ -153,11 +156,11 @@ public class LinkableColorsSettings : ModSettings
 
         options.Gap();
 
-        options.ColumnWidth = rect.width / 2 + checkboxOffset;
+        options.ColumnWidth = (rect.width / 2) + CheckBoxOffset;
 
         if (VersionControl.CurrentMinor >= 3)
         {
-            options.TextFieldNumericLabeled("Line Thickness      ", ref LineThickness, ref LineThicknessBuffer, 0);
+            options.TextFieldNumericLabeled("Line Thickness      ", ref LineThickness, ref _LineThicknessBuffer, 0);
         }
 
         options.CheckboxLabeled("Use Solid Colors for Line Shader", ref UseSolidLineShader);
@@ -166,25 +169,29 @@ public class LinkableColorsSettings : ModSettings
 
         options.GapLine();
 
-        options.Label("Color Customization");
+        _ = options.Label("Color Customization");
 
-        //options.Label("You can use any color name recognized by Unity (such as red, cyan, blue, ...)");
-        //options.Label("or a hexadecimal literal starting with '#' (such as #FF0000, #00FFFF, #0000FF, ...),");
-        //options.Label("but the text entry field will always show the hex literal.");
+        //_ = options.Label("You can use any color name recognized by Unity (such as red, cyan, blue, ...)");
+        //_ = options.Label("or a hexadecimal literal starting with '#' (such as #FF0000, #00FFFF, #0000FF, ...),");
+        //_ = options.Label("but the text entry field will always show the hex literal.");
 
-        //options.ColumnWidth = rect.width / 4 + Xoffset;
+        //options.ColumnWidth = rect.width / 4 + XOffset;
 
         //options.AddLabeledRadioList("Active Link Color", Enum.GetValues(typeof(ColorLabel)).Cast<ColorLabel>(), ref ActiveColorLabel, el => el.ToString().ToLower());
 
         //Text.Anchor = TextAnchor.MiddleLeft;
 
-        //options.SubLabel("Active Link Color", 1f);
+        //_ = options.SubLabel("Active Link Color", 1f);
 
         ActiveColorString = options.TextEntryLabeled("Active ", ActiveColorString);
 
         if (!ColorUtility.TryParseHtmlString(ActiveColorString, out Color _))
         {
-            options.SubLabel("  Invalid Color", 1f);
+#if RIMWORLD_14_OR_GREATER
+            _ = options.SubLabel("  Invalid Color", 1f);
+#else
+            _ = options.Label("  Invalid Color", 1f);
+#endif
         }
 
         //options.ColumnWidth = defaultWidth; 
@@ -193,59 +200,71 @@ public class LinkableColorsSettings : ModSettings
 
         //if (VersionControl.CurrentMinor >= 3)
         //{
-        //    options.Label("All changes require a restart to take effect.");
+        //    _ = options.Label("All changes require a restart to take effect.");
         //}
 
         //options.Gap(100);
-        //options.SliderLabeled("OffsetX", ref Xoffset, el => Math.Round(el, 2).ToString(), -100, -14);
-        //options.SliderLabeled("OffsetY", ref Yoffset, el => Math.Round(el, 2).ToString(), 90, 120);
-        //options.SliderLabeled("cbxOffset", ref checkboxOffset, el => Math.Round(el, 2).ToString(), -500, 10);
-        //options.ColumnWidth = rect.width / 4 + Xoffset;
+        //options.SliderLabeled("OffsetX", ref XOffset, el => Math.Round(el, 2).ToString(), -100, -14);
+        //options.SliderLabeled("OffsetY", ref YOffset, el => Math.Round(el, 2).ToString(), 90, 120);
+        //options.SliderLabeled("cbxOffset", ref CheckBoxOffset, el => Math.Round(el, 2).ToString(), -500, 10);
+        //options.ColumnWidth = rect.width / 4 + XOffset;
 
         //options.NewColumn();
-        //options.Gap(Yoffset);
+        //options.Gap(YOffset);
 
         //options.AddLabeledRadioList("Inactive Link Color", Enum.GetValues(typeof(ColorLabel)).Cast<ColorLabel>(), ref InactiveColorLabel, el => el.ToString().ToLower());
 
-        //options.SubLabel("Inactive Link Color", 1f);
+        //_ = options.SubLabel("Inactive Link Color", 1f);
         InactiveColorString = options.TextEntryLabeled("Inactive ", InactiveColorString);
 
         if (!ColorUtility.TryParseHtmlString(InactiveColorString, out Color _))
         {
-            options.SubLabel("  Invalid Color", 1f);
+#if RIMWORLD_14_OR_GREATER
+            _ = options.SubLabel("  Invalid Color", 1f);
+#else
+            _ = options.Label("  Invalid Color", 1f);
+#endif
         }
 
         //options.ColumnWidth = defaultWidth;
         //options.GapLine();
 
-        //options.ColumnWidth = rect.width / 4 + Xoffset;
+        //options.ColumnWidth = rect.width / 4 + XOffset;
 
         //options.NewColumn();
-        //options.Gap(Yoffset);
+        //options.Gap(YOffset);
 
         //options.AddLabeledRadioList("Potential Link Color", Enum.GetValues(typeof(ColorLabel)).Cast<ColorLabel>(), ref PotentialColorLabel, el => el.ToString().ToLower());
         //options.GapLine();
 
-        //options.SubLabel("Potential Link Color", 1f);
+        //_ = options.SubLabel("Potential Link Color", 1f);
         PotentialColorString = options.TextEntryLabeled("Potential ", PotentialColorString);
 
         if (!ColorUtility.TryParseHtmlString(PotentialColorString, out Color _))
         {
-            options.SubLabel("  Invalid Color", 1f);
+#if RIMWORLD_14_OR_GREATER
+            _ = options.SubLabel("  Invalid Color", 1f);
+#else
+            _ = options.Label("  Invalid Color", 1f, );
+#endif
         }
 
         //options.NewColumn();
-        //options.Gap(Yoffset);
+        //options.Gap(YOffset);
 
         //options.AddLabeledRadioList("Overridden Link Color", Enum.GetValues(typeof(ColorLabel)).Cast<ColorLabel>(), ref SupplantedColorLabel, el => el.ToString().ToLower());
         //options.GapLine();
 
-        //options.SubLabel("Overridden Link Color", 1f);
+        //_ = options.SubLabel("Overridden Link Color", 1f);
         SupplantedColorString = options.TextEntryLabeled("Overridden ", SupplantedColorString);
 
         if (!ColorUtility.TryParseHtmlString(SupplantedColorString, out Color _))
         {
-            options.SubLabel("  Invalid Color", 1f);
+#if RIMWORLD_14_OR_GREATER
+            _ = options.SubLabel("  Invalid Color", 1f);
+#else
+            _ = options.Label("  Invalid Color", 1f);
+#endif
         }
 
         //options.ColumnWidth = defaultWidth;
@@ -253,20 +272,23 @@ public class LinkableColorsSettings : ModSettings
         options.End();
     }
 
+    /// <summary>
+    /// Exposes data for the game's settings.
+    /// </summary>
     public override void ExposeData()
     {
-        Scribe_Values.Look(ref UseSolidLineShader, "linkablecolors_usesolidlineshader", true);
+        Scribe_Values.Look(ref UseSolidLineShader, $"{nameof(linkablecolors)}_{nameof(UseSolidLineShader).ToLower()}", true);
 
-        //Scribe_Values.Look(ref ActiveColorLabel, "linkablecolors_activecolor", ColorLabel.GREEN);
-        //Scribe_Values.Look(ref InactiveColorLabel, "linkablecolors_inactivecolor", ColorLabel.RED);
-        //Scribe_Values.Look(ref PotentialColorLabel, "linkablecolors_potentialcolor", ColorLabel.BLUE);
-        //Scribe_Values.Look(ref SupplantedColorLabel, "linkablecolors_supplantedcolor", ColorLabel.YELLOW);
+        //Scribe_Values.Look(ref ActiveColorLabel, $"{nameof(linkablecolors)}_{nameof(ActiveColorLabel).Replace("Label", "").ToLower()}", ColorLabel.GREEN);
+        //Scribe_Values.Look(ref InactiveColorLabel, $"{nameof(linkablecolors)}_{nameof(InactiveColorLabel).Replace("Label", "").ToLower()}", ColorLabel.RED);
+        //Scribe_Values.Look(ref PotentialColorLabel, $"{nameof(linkablecolors)}_{nameof(PotentialColorLabel).Replace("Label", "").ToLower()}", ColorLabel.BLUE);
+        //Scribe_Values.Look(ref SupplantedColorLabel, $"{nameof(linkablecolors)}_{nameof(SupplantedColorLabel).Replace("Label", "").ToLower()}", ColorLabel.YELLOW);
 
-        Scribe_Values.Look(ref LineThickness, "linkablecolors_linethickness", 0.2f);
+        Scribe_Values.Look(ref LineThickness, $"{nameof(linkablecolors)}_{nameof(LineThickness).ToLower()}", 0.2f);
 
-        Scribe_Values.Look(ref ActiveColorString, "linkablecolors_activecolorstring", ColorHelper.Defaults.ActiveColor.ToHtmlString());
-        Scribe_Values.Look(ref InactiveColorString, "linkablecolors_inactivecolorstring", ColorHelper.Defaults.InactiveColor.ToHtmlString());
-        Scribe_Values.Look(ref PotentialColorString, "linkablecolors_potentialcolorstring", ColorHelper.Defaults.PotentialColor.ToHtmlString());
-        Scribe_Values.Look(ref SupplantedColorString, "linkablecolors_supplantedcolorstring", ColorHelper.Defaults.SupplantedColor.ToHtmlString());
+        Scribe_Values.Look(ref ActiveColorString, $"{nameof(linkablecolors)}_{nameof(ActiveColorString).ToLower()}", ColorHelper.Defaults.ActiveColor.ToHtmlString());
+        Scribe_Values.Look(ref InactiveColorString, $"{nameof(linkablecolors)}_{nameof(InactiveColorString).ToLower()}", ColorHelper.Defaults.InactiveColor.ToHtmlString());
+        Scribe_Values.Look(ref PotentialColorString, $"{nameof(linkablecolors)}_{nameof(PotentialColorString).ToLower()}", ColorHelper.Defaults.PotentialColor.ToHtmlString());
+        Scribe_Values.Look(ref SupplantedColorString, $"{nameof(linkablecolors)}_{nameof(SupplantedColorString).ToLower()}", ColorHelper.Defaults.SupplantedColor.ToHtmlString());
     }
 }
