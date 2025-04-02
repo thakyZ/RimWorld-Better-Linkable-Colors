@@ -6,9 +6,9 @@ using Verse;
 
 namespace drummeur.linkablecolors;
 
-public partial class LinkableColorsSettings : ModSettings
+public class LinkableColorsSettings : ModSettings
 {
-    public static readonly Dictionary<ColorLabel, Color> Colors = new Dictionary<ColorLabel, Color>()
+    public static readonly IReadOnlyDictionary<ColorLabel, Color> Colors = new Dictionary<ColorLabel, Color>()
     {
         [ColorLabel.CYAN] = Color.cyan,
         [ColorLabel.GREY] = Color.grey,
