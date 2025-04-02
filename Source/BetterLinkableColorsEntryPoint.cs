@@ -12,7 +12,7 @@ public class BetterLinkableColorsEntryPoint : Mod
         this.Settings = GetSettings<LinkableColorsSettings>();
     }
 
-    public override string SettingsCategory() => "Better Linkable Colors";
+    public override string SettingsCategory() => "BetterLinkableColors.Settings.Title".TranslateSimple();
 
     public override void DoSettingsWindowContents(Rect inRect)
     {
