@@ -8,8 +8,7 @@ using UnityEngine;
 using Verse;
 
 using drummeur.linkablecolors.Util;
-
-using static drummeur.linkablecolors.Settings.LinkableColorsSettings;
+using static drummeur.linkablecolors.LinkableColorsSettings;
 
 namespace drummeur.linkablecolors;
 
