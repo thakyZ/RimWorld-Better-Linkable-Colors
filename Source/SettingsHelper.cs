@@ -6,7 +6,6 @@ using Verse;
 
 namespace drummeur.linkablecolors;
 
-
 //thanks to AlexTD for the below
 internal static class SettingsHelper
 {
@@ -156,7 +155,7 @@ internal static class SettingsHelper
     }
 
     public class LabeledRadioValue<T>: LabeledRadioValue<string, T>
-    {           
+    {
         public LabeledRadioValue(string label, T value) : base(label, value)
         {
             Label = label;
@@ -169,10 +168,10 @@ internal static class SettingsHelper
     // REFERENCE: https://github.com/erdelf/PrisonerRansom/
     // modified by drummeur to make it use generics and Enumerables
     public static void AddLabeledRadioList<T>(this Listing_Standard listing_Standard, string header, IEnumerable<T> labels, ref T val, float? headerHeight = null)
-    { 
-        if (header != string.Empty) 
-        { 
-            Widgets.Label(listing_Standard.GetRect(headerHeight), header); 
+    {
+        if (header != string.Empty)
+        {
+            Widgets.Label(listing_Standard.GetRect(headerHeight), header);
         }
 
         listing_Standard.AddRadioList(GenerateLabeledRadioValues(labels), ref val);
@@ -187,7 +186,6 @@ internal static class SettingsHelper
 
         listing_Standard.AddRadioList(GenerateLabeledRadioValues(labels, formatter), ref val);
     }
-
 
     private static IEnumerable<LabeledRadioValue<T>> GenerateLabeledRadioValues<T>(IEnumerable<T> labels)
     {
@@ -229,7 +227,7 @@ internal static class SettingsHelper
     }
 
     private static IEnumerable<LabeledRadioValue<TLabel, TValue>> GenerateLabeledRadioValues<TLabel, TValue>(IEnumerable<KeyValuePair<TLabel, TValue>> kvps)
-    { 
+    {
         foreach (var kvp in kvps)
         {
             yield return new LabeledRadioValue<TLabel, TValue>(kvp.Key, kvp.Value);

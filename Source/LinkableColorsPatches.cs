@@ -25,7 +25,6 @@ class LinkableColorsPatches
         AccessTools.Method(typeof(GenDraw), nameof(GenDraw.DrawLineBetween), new Type[] { typeof(Vector3), typeof(Vector3), typeof(Material), typeof(float) }) :
         AccessTools.Method(typeof(GenDraw), nameof(GenDraw.DrawLineBetween), new Type[] { typeof(Vector3), typeof(Vector3), typeof(Material) });
 
-
     internal static Shader shader = UseSolidLineShader ? ShaderDatabase.SolidColor : ShaderDatabase.Transparent;
 
     //internal static Material ActiveLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, Colors[ActiveColorLabel]);
@@ -37,7 +36,6 @@ class LinkableColorsPatches
     internal static Material InactiveLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, ColorHelper.ColorFromRgbString(InactiveColorString) ?? ColorHelper.Defaults.InactiveColor);
     internal static Material PotentialLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, ColorHelper.ColorFromRgbString(PotentialColorString) ?? ColorHelper.Defaults.PotentialColor);
     internal static Material SupplantedLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, shader, ColorHelper.ColorFromRgbString(SupplantedColorString) ?? ColorHelper.Defaults.SupplantedColor);
-
 
     internal static FieldInfo ActiveLine = AccessTools.Field(typeof(LinkableColorsPatches), nameof(ActiveLineMat));
     internal static FieldInfo InactiveLine = AccessTools.Field(typeof(LinkableColorsPatches), nameof(InactiveLineMat));
@@ -51,7 +49,7 @@ class LinkableColorsPatches
     }
 
     internal static IEnumerable<CodeInstruction> PatchPostDrawExtraSectionOverlays(IEnumerable<CodeInstruction> source)
-    {         
+    {
         foreach (var op in source)
         {
             // intercept the call to the 2adic DrawnLineBetween methods
@@ -167,7 +165,6 @@ public static class CompAffectedByFacilities_DrawRedLineToPotentiallSupplantedFa
 
     static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> source)
     {
-
         foreach (var op in source)
         {
             if (op.opcode == OpCodes.Ldsfld)
@@ -186,6 +183,3 @@ public static class CompAffectedByFacilities_DrawRedLineToPotentiallSupplantedFa
         }
     }
 }
-
-
-

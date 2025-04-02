@@ -100,7 +100,6 @@ class Settings
 
         //    //options.SliderLabeledSettable("Line Thickness", ref LineThickness, ref LineThicknessBuffer, el => el.ToString("F3"), 0, 1);
 
-
         //    options.ColumnWidth = defaultWidth;
 
         //    options.GapLine();
@@ -108,7 +107,6 @@ class Settings
         //    options.ColumnWidth = rect.width / 4 + Xoffset;
 
         //    options.AddLabeledRadioList("Active Link Color", Enum.GetValues(typeof(ColorLabel)).Cast<ColorLabel>(), ref ActiveColorLabel, el => el.ToString().ToLower());
-
 
         //    options.ColumnWidth = defaultWidth;
 
@@ -152,7 +150,6 @@ class Settings
         //    options.End();
         //}
 
-
         public void DoWindowContents(Rect rect)
         {
             Listing_Standard options = new Listing_Standard();
@@ -191,7 +188,6 @@ class Settings
 
             options.Label("Color Customization");
 
-
             //options.Label("You can use any color name recognized by Unity (such as red, cyan, blue, ...)");
             //options.Label("or a hexadecimal literal starting with '#' (such as #FF0000, #00FFFF, #0000FF, ...),");
             //options.Label("but the text entry field will always show the hex literal.");
@@ -212,7 +208,7 @@ class Settings
             }
 
             //options.ColumnWidth = defaultWidth; 
-              
+
             //options.GapLine();
 
             //if (VersionControl.CurrentMinor >= 3)
@@ -309,5 +305,4 @@ class Settings
             GetSettings<LinkableColorsSettings>().DoWindowContents(inRect);
         }
     }
-
 }

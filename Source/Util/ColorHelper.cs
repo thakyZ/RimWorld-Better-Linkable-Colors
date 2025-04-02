@@ -18,7 +18,7 @@ internal static class ColorHelper
         else
         {
             return null;
-        }            
+        }
     }
 
     internal static string ToHtmlString(this Color color)
@@ -33,5 +33,4 @@ internal static class ColorHelper
         internal static Color PotentialColor = Color.blue;
         internal static Color SupplantedColor = Color.yellow;
     }
-
 }
