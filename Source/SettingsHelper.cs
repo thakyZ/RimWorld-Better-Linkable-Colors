@@ -103,9 +103,11 @@ internal static class SettingsHelper
         //listing_Standard.Gap(Gap);
         _ = listing_Standard.LineRectSplitter(out Rect leftHalf, out Rect rightHalf, leftPartPct);
 
-        // TODO: tooltips
-        //Widgets.DrawHighlightIfMouseover(lineRect);
-        //TooltipHandler.TipRegion(lineRect, "TODO: TIP GOES HERE");
+        if (!tooltip.NullOrEmpty())
+        {
+            Widgets.DrawHighlightIfMouseover(leftHalf);
+            TooltipHandler.TipRegion(leftHalf, tooltip);
+        }
 
         Widgets.Label(leftHalf, label);
 
@@ -141,9 +143,11 @@ internal static class SettingsHelper
         //listing_Standard.Gap(Gap);
         _ = listing_Standard.LineRectSplitter(out Rect leftHalf, out Rect rightHalf, leftPartPct);
 
-        // TODO: tooltips
-        //Widgets.DrawHighlightIfMouseover(lineRect);
-        //TooltipHandler.TipRegion(lineRect, "TODO: TIP GOES HERE");
+        if (!tooltip.NullOrEmpty())
+        {
+            Widgets.DrawHighlightIfMouseover(leftHalf);
+            TooltipHandler.TipRegion(leftHalf, tooltip);
+        }
 
         Widgets.Label(leftHalf, label);
 
