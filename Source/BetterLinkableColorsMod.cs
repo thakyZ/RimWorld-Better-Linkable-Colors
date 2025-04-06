@@ -16,7 +16,10 @@ public class BetterLinkableColorsMod : Mod
     /// </summary>
     public BetterLinkableColorsMod(ModContentPack content) : base(content)
     {
+        Log.Message("Loading Settings");
         Settings = GetSettings<Settings>();
+        Log.Message("Loaded Settings");
+        //Materials.Reset();
     }
 
     /// <summary>
