@@ -6,16 +6,16 @@ root = true
 #### Core EditorConfig Options ####
 
 # Indentation and spacing
-indent_size = 2
+indent_size = 4
 indent_style = space
-tab_width = 2
+tab_width = 4
 
 # New line preferences
 end_of_line = crlf
 insert_final_newline = false
 vsspell_section_id = 9319ea24a21a45128d26873a0f1764c8
 vsspell_dictionary_languages_9319ea24a21a45128d26873a0f1764c8 = inherited,en-US
-vsspell_ignored_words_9319ea24a21a45128d26873a0f1764c8 = linkablecolors|drummeur
+vsspell_ignored_words_9319ea24a21a45128d26873a0f1764c8 = drummeur|linkablecolors|Blackist|Greyist
 
 # C# files
 [*.cs]
@@ -244,23 +244,23 @@ dotnet_naming_rule.internal_or_public_readonly_should_be_camel_case.style = came
 
 dotnet_naming_rule.private_readonly_should_be_upper_case_begins_with_underscore.severity = suggestion
 dotnet_naming_rule.private_readonly_should_be_upper_case_begins_with_underscore.symbols = private_readonly
-dotnet_naming_rule.private_readonly_should_be_upper_case_begins_with_underscore.style = upper_case_begins_with_underscore
+dotnet_naming_rule.private_readonly_should_be_upper_case_begins_with_underscore.style = camel_case_begins_with_underscore
 
 dotnet_naming_rule.internal_or_public_static_field_should_be_pascal_case.severity = suggestion
 dotnet_naming_rule.internal_or_public_static_field_should_be_pascal_case.symbols = internal_or_public_static_field
-dotnet_naming_rule.internal_or_public_static_field_should_be_pascal_case.style = pascal_case
+dotnet_naming_rule.internal_or_public_static_field_should_be_pascal_case.style = camel_case
 
 dotnet_naming_rule.private_static_field_should_be_pascal_case_begins_with_underscore.severity = suggestion
 dotnet_naming_rule.private_static_field_should_be_pascal_case_begins_with_underscore.symbols = private_static_field
-dotnet_naming_rule.private_static_field_should_be_pascal_case_begins_with_underscore.style = pascal_case_begins_with_underscore
+dotnet_naming_rule.private_static_field_should_be_pascal_case_begins_with_underscore.style = camel_case_begins_with_underscore
 
 dotnet_naming_rule.internal_or_public_static_readonly_should_be_pascal_case.severity = suggestion
 dotnet_naming_rule.internal_or_public_static_readonly_should_be_pascal_case.symbols = internal_or_public_static_readonly
-dotnet_naming_rule.internal_or_public_static_readonly_should_be_pascal_case.style = pascal_case
+dotnet_naming_rule.internal_or_public_static_readonly_should_be_pascal_case.style = camel_case
 
 dotnet_naming_rule.private_static_readonly_should_be_pascal_case_begins_with_underscore.severity = suggestion
 dotnet_naming_rule.private_static_readonly_should_be_pascal_case_begins_with_underscore.symbols = private_static_readonly
-dotnet_naming_rule.private_static_readonly_should_be_pascal_case_begins_with_underscore.style = pascal_case_begins_with_underscore
+dotnet_naming_rule.private_static_readonly_should_be_pascal_case_begins_with_underscore.style = camel_case_begins_with_underscore
 
 dotnet_naming_rule.internal_or_public_constants_should_be_upper_snake_case.severity = suggestion
 dotnet_naming_rule.internal_or_public_constants_should_be_upper_snake_case.symbols = internal_or_public_constants
@@ -296,11 +296,11 @@ dotnet_naming_symbols.async_method.applicable_kinds = event, delegate, method, l
 dotnet_naming_symbols.async_method.applicable_accessibilities = *
 dotnet_naming_symbols.async_method.required_modifiers = abstract, async, static
 
-dotnet_naming_symbols.internal_or_public_field.applicable_kinds = field
+dotnet_naming_symbols.internal_or_public_field.applicable_kinds = field, local
 dotnet_naming_symbols.internal_or_public_field.applicable_accessibilities = public, internal, protected_internal
 dotnet_naming_symbols.internal_or_public_field.required_modifiers = 
 
-dotnet_naming_symbols.internal_or_public_static_field.applicable_kinds = field
+dotnet_naming_symbols.internal_or_public_static_field.applicable_kinds = field, local
 dotnet_naming_symbols.internal_or_public_static_field.applicable_accessibilities = public, internal, protected_internal
 dotnet_naming_symbols.internal_or_public_static_field.required_modifiers = static
 
@@ -389,9 +389,6 @@ dotnet_naming_style.upper_snake_case_begins_with_underscore.capitalization = all
 
 [*.{cs,vb}]
 dotnet_style_operator_placement_when_wrapping = beginning_of_line
-tab_width = 4
-indent_size = 4
-end_of_line = crlf
 dotnet_style_coalesce_expression = true:suggestion
 dotnet_style_null_propagation = true:suggestion
 dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
@@ -399,7 +396,7 @@ dotnet_style_prefer_auto_properties = false:silent
 dotnet_style_object_initializer = true:suggestion
 dotnet_style_collection_initializer = true:suggestion
 dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
-dotnet_style_prefer_conditional_expression_over_assignment = true:suggestion
+dotnet_style_prefer_conditional_expression_over_assignment = false:suggestion
 dotnet_style_prefer_conditional_expression_over_return = false:suggestion
 dotnet_style_explicit_tuple_names = true:suggestion
 dotnet_style_namespace_match_folder = true:suggestion
