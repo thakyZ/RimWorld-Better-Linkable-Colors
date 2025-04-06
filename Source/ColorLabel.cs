@@ -1,4 +1,4 @@
-namespace Drummeur.BetterLinkableColors;
+﻿namespace Drummeur.BetterLinkableColors;
 /// <summary>
 /// An enum representing different states for the colors.
 /// </summary>
@@ -40,8 +40,8 @@ public enum ColorLabel
     /// Uses the <see cref="UnityEngine.Color.yellow" />
     /// </summary>
     YELLOW = 8,
-    ///// <summary>
-    ///// Uses a custom <see cref="UnityEngine.Color" />
-    ///// </summary>
-    //CUSTOM = 9,
+    /// <summary>
+    /// Uses a custom <see cref="UnityEngine.Color" />
+    /// </summary>
+    CUSTOM = 9,
 };
