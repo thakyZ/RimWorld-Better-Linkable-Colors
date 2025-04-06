@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <BetterLinkableColors.Settings.Title>Better Linkable Colors</BetterLinkableColors.Settings.Title>
+
+  <BetterLinkableColors.Settings.Colors.Title>Better Linkable Colors Settings</BetterLinkableColors.Settings.Colors.Title>
+
+  <BetterLinkableColors.Settings.LineThickness.Label>Line Thickness</BetterLinkableColors.Settings.LineThickness.Label>
+  <BetterLinkableColors.Settings.UseSolidColors.Label>Use Solid Colors for Line Shader</BetterLinkableColors.Settings.UseSolidColors.Label>
+
+  <BetterLinkableColors.Settings.ColorCustomization.Title>Color Customization</BetterLinkableColors.Settings.ColorCustomization.Title>
+  <BetterLinkableColors.Settings.ColorCustomization.Description>You can use any color name recognized by Unity (such as red, cyan, blue, ...) or a hexadecimal literal starting with '#' (such as #FF0000, #00FFFF, #0000FF, ...), but the text entry field will always show the hex literal.</BetterLinkableColors.Settings.ColorCustomization.Description>
+
+  <BetterLinkableColors.Settings.OffsetXSlider.Label>Offset X</BetterLinkableColors.Settings.OffsetXSlider.Label>
+  <BetterLinkableColors.Settings.OffsetYSlider.Label>Offset Y</BetterLinkableColors.Settings.OffsetYSlider.Label>
+  <BetterLinkableColors.Settings.CheckBoxOffsetSlider.Label>CheckBox Offset</BetterLinkableColors.Settings.CheckBoxOffsetSlider.Label>
+
+  <BetterLinkableColors.Settings.ActiveLinkColor.Label>Active Link Color</BetterLinkableColors.Settings.ActiveLinkColor.Label>
+  <BetterLinkableColors.Settings.ActiveLinkColor.SubLabel>Active Link Color</BetterLinkableColors.Settings.ActiveLinkColor.SubLabel>
+  <BetterLinkableColors.Settings.ActiveTextEntry.Label>Active</BetterLinkableColors.Settings.ActiveTextEntry.Label>
+
+  <BetterLinkableColors.Settings.InactiveLinkColor.Label>Inactive Link Color</BetterLinkableColors.Settings.InactiveLinkColor.Label>
+  <BetterLinkableColors.Settings.InactiveLinkColor.SubLabel>Inactive Link Color</BetterLinkableColors.Settings.InactiveLinkColor.SubLabel>
+  <BetterLinkableColors.Settings.InactiveTextEntry.Label>Inactive</BetterLinkableColors.Settings.InactiveTextEntry.Label>
+
+  <BetterLinkableColors.Settings.PotentialLinkColor.Label>Potential Link Color</BetterLinkableColors.Settings.PotentialLinkColor.Label>
+  <BetterLinkableColors.Settings.PotentialLinkColor.SubLabel>Potential Link Color</BetterLinkableColors.Settings.PotentialLinkColor.SubLabel>
+  <BetterLinkableColors.Settings.PotentialTextEntry.Label>Potential</BetterLinkableColors.Settings.PotentialTextEntry.Label>
+
+  <BetterLinkableColors.Settings.OverriddenLinkColor.Label>Overridden Link Color</BetterLinkableColors.Settings.OverriddenLinkColor.Label>
+  <BetterLinkableColors.Settings.OverriddenLinkColor.SubLabel>Overridden Link Color</BetterLinkableColors.Settings.OverriddenLinkColor.SubLabel>
+  <BetterLinkableColors.Settings.OverriddenTextEntry.Label>Overridden</BetterLinkableColors.Settings.OverriddenTextEntry.Label>
+
+  <BetterLinkableColors.Settings.InvalidColor.SubLabel>Invalid Color</BetterLinkableColors.Settings.InvalidColor.SubLabel>
+  <BetterLinkableColors.Settings.RequireRestart.Label>All changes require a restart to take effect</BetterLinkableColors.Settings.RequireRestart.Label>
+
+  <BetterLinkableColors.Settings.ApplyButton.Label>Apply</BetterLinkableColors.Settings.ApplyButton.Label>
+  <BetterLinkableColors.Settings.SaveButton.Label>Save</BetterLinkableColors.Settings.SaveButton.Label>
+  <BetterLinkableColors.Settings.OkButton.Label>Ok</BetterLinkableColors.Settings.OkButton.Label>
+  <BetterLinkableColors.Settings.CancelButton.Label>Cancel</BetterLinkableColors.Settings.CancelButton.Label>
+
+  <BetterLinkableColors.Settings.DevButton.Label>Dev</BetterLinkableColors.Settings.DevButton.Label>
+  <BetterLinkableColors.Settings.OffsetXSlider.Label>Offset X</BetterLinkableColors.Settings.OffsetXSlider.Label>
+  <BetterLinkableColors.Settings.OffsetYSlider.Label>Offset Y</BetterLinkableColors.Settings.OffsetYSlider.Label>
+  <BetterLinkableColors.Settings.CheckBoxOffsetSlider.Label>CheckBox Offset</BetterLinkableColors.Settings.CheckBoxOffsetSlider.Label>
+  <BetterLinkableColors.Settings.TopRowHeightSlider.Label>Top Row Height</BetterLinkableColors.Settings.TopRowHeightSlider.Label>
+  <BetterLinkableColors.Settings.ColorMarginSlider.Label>Color Button Margin</BetterLinkableColors.Settings.ColorMarginSlider.Label>
+</LanguageData>

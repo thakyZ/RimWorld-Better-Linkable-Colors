@@ -1,8 +1,7 @@
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
-using HarmonyLib;
-using RimWorld;
 using UnityEngine;
 using Verse;
 using RimWorld;
@@ -12,10 +11,11 @@ namespace Drummeur.BetterLinkableColors;
 /// A collection of methods to use for creating the better linkable colors patches.
 /// </summary>
 [StaticConstructorOnStartup]
-public class LinkableColorsPatches
+public static class LinkableColorsPatches
 {
 #region Method References
 
+#pragma warning disable IDE1006 // Naming Styles
     /// <summary>
     /// A reference to the <see cref="GenDraw.DrawLineBetween(Vector3,Vector3)" /> method.
     /// </summary>
@@ -30,6 +30,7 @@ public class LinkableColorsPatches
     /// </remarks>
     internal static readonly MethodInfo DrawLineBetween3adic = AccessTools.Method(typeof(GenDraw), nameof(GenDraw.DrawLineBetween), [typeof(Vector3), typeof(Vector3), typeof(Material), typeof(float)]);
 #else
+
     /// <summary>
     /// A reference to the <see cref="GenDraw.DrawLineBetween(Vector3,Vector3,Material)" /> method.
     /// </summary>
@@ -37,79 +38,105 @@ public class LinkableColorsPatches
 #endif
 
     /// <summary>
-    /// Gets which shader to use from the <see cref="ShaderDatabase" /> which is determined by the <see cref="LinkableColorsSettings.UseSolidLineShader" /> setting.
+    /// A reference to the <see cref="ActiveLineMat" /> property getter.
     /// </summary>
-    internal static Shader Shader => UseSolidLineShader ? ShaderDatabase.SolidColor : ShaderDatabase.Transparent;
-
-    ///// <summary>
-    ///// Gets the value for the active line using the reference to the material from the <see cref="MaterialPool" /> using the value from the <see cref="LinkableColorsSettings.ActiveColorLabel" /> setting.
-    ///// </summary>
-    //internal static Material ActiveLineMat => MaterialPool.MatFrom(GenDraw.LineTexPath, Shader, Colors[ActiveColorLabel]);
-
-    ///// <summary>
-    ///// Gets the value for the inactive line using the reference to the material from the <see cref="MaterialPool" /> using the value from the <see cref="LinkableColorsSettings.InactiveColorLabel" /> setting.
-    ///// </summary>
-    //internal static Material InactiveLineMat => MaterialPool.MatFrom(GenDraw.LineTexPath, Shader, Colors[InactiveColorLabel]);
-
-    ///// <summary>
-    ///// Gets the value for the potential line using the reference to the material from the <see cref="MaterialPool" /> using the value from the <see cref="LinkableColorsSettings.PotentialColorLabel" /> setting.
-    ///// </summary>
-    //internal static Material PotentialLineMat => MaterialPool.MatFrom(GenDraw.LineTexPath, Shader, Colors[PotentialColorLabel]);
-
-    ///// <summary>
-    ///// Gets the value for the supplanted line using the reference to the material from the <see cref="MaterialPool" /> using the value from the <see cref="LinkableColorsSettings.SupplantedColorLabel" /> setting.
-    ///// </summary>
-    //internal static Material SupplantedLineMat => MaterialPool.MatFrom(GenDraw.LineTexPath, Shader, Colors[SupplantedColorLabel]);
+    internal static readonly FieldInfo ActiveLineField = AccessTools.Field(typeof(Materials), nameof(Materials.ActiveLineMat));
 
     /// <summary>
-    /// Gets the value for the active line using the reference to the material from the <see cref="MaterialPool" /> using the value from the <see cref="LinkableColorsSettings.ActiveColorLabel" /> setting.
+    /// A reference to the <see cref="InactiveLineMat" /> property getter.
     /// </summary>
-    internal static Material ActiveLineMat => MaterialPool.MatFrom(GenDraw.LineTexPath, Shader, ColorHelper.ColorFromRgbString(ActiveColorString) ?? ColorHelper.Defaults.ActiveColor);
+    internal static readonly FieldInfo InactiveLineField = AccessTools.Field(typeof(Materials), nameof(Materials.InactiveLineMat));
 
     /// <summary>
-    /// Gets the value for the inactive line using the reference to the material from the <see cref="MaterialPool" /> using the value from the <see cref="LinkableColorsSettings.InactiveColorLabel" /> setting.
+    /// A reference to the <see cref="PotentialLineMat" /> property getter.
     /// </summary>
-    internal static Material InactiveLineMat => MaterialPool.MatFrom(GenDraw.LineTexPath, Shader, ColorHelper.ColorFromRgbString(InactiveColorString) ?? ColorHelper.Defaults.InactiveColor);
+    internal static readonly FieldInfo PotentialLineField = AccessTools.Field(typeof(Materials), nameof(Materials.PotentialLineMat));
 
     /// <summary>
-    /// Gets the value for the potential line using the reference to the material from the <see cref="MaterialPool" /> using the value from the <see cref="LinkableColorsSettings.PotentialColorLabel" /> setting.
+    /// A reference to the <see cref="SupplantedLineMat" /> property getter.
     /// </summary>
-    internal static Material PotentialLineMat => MaterialPool.MatFrom(GenDraw.LineTexPath, Shader, ColorHelper.ColorFromRgbString(PotentialColorString) ?? ColorHelper.Defaults.PotentialColor);
+    internal static readonly FieldInfo SupplantedLineField = AccessTools.Field(typeof(Materials), nameof(Materials.OverriddenLineMat));
 
     /// <summary>
-    /// Gets the value for the supplanted line using the reference to the material from the <see cref="MaterialPool" /> using the value from the <see cref="LinkableColorsSettings.SupplantedColorLabel" /> setting.
+    /// A reference to the <see cref="CompAffectedByFacilities.InactiveFacilityLineMat" /> field.
     /// </summary>
-    internal static Material SupplantedLineMat => MaterialPool.MatFrom(GenDraw.LineTexPath, Shader, ColorHelper.ColorFromRgbString(SupplantedColorString) ?? ColorHelper.Defaults.SupplantedColor);
+    internal static readonly FieldInfo InactiveFacilityLineMatField = AccessTools.Field(typeof(CompAffectedByFacilities), nameof(CompAffectedByFacilities.InactiveFacilityLineMat));
 
     /// <summary>
-    /// A reference to the <see cref="ActiveLineMat" /> property.
+    /// A reference to the <see cref="Settings.LineThickness" /> field.
     /// </summary>
-    internal static readonly PropertyInfo ActiveLine = AccessTools.Property(typeof(LinkableColorsPatches), nameof(ActiveLineMat));
-
-    /// <summary>
-    /// A reference to the <see cref="InactiveLineMat" /> property.
-    /// </summary>
-    internal static readonly PropertyInfo InactiveLine = AccessTools.Property(typeof(LinkableColorsPatches), nameof(InactiveLineMat));
-
-    /// <summary>
-    /// A reference to the <see cref="PotentialLineMat" /> property.
-    /// </summary>
-    internal static readonly PropertyInfo PotentialLine = AccessTools.Property(typeof(LinkableColorsPatches), nameof(PotentialLineMat));
-
-    /// <summary>
-    /// A reference to the <see cref="SupplantedLineMat" /> property.
-    /// </summary>
-    internal static readonly PropertyInfo SupplantedLine = AccessTools.Property(typeof(LinkableColorsPatches), nameof(SupplantedLineMat));
+    internal static readonly FieldInfo LineThicknessField = AccessTools.Field(typeof(Settings), nameof(Settings.LineThickness));
+#pragma warning restore IDE1006 // Naming Styles
 
 #endregion Method References
+
+    /// <summary>
+    /// A <see langword="bool" /> that determines if finding methods or fields failed, so that the patching aborts safely.
+    /// </summary>
+    internal static readonly bool failed;
 
     /// <summary>
     /// A static constructor to set up HarmonyLib for patching.
     /// </summary>
     static LinkableColorsPatches()
     {
-        var harmony = new Harmony($"{nameof(drummeur)}.{nameof(linkablecolors)}");
-        harmony.PatchAll();
+        if (DrawLineBetween2adic is null)
+        {
+            failed = true;
+            throw new MissingMethodException($"Unable to find method with name {nameof(GenDraw)}.{nameof(GenDraw.DrawLineBetween)}({nameof(UnityEngine)}.{nameof(Vector3)}, {nameof(UnityEngine)}.{nameof(Vector3)})");
+        }
+
+        if (DrawLineBetween3adic is null)
+        {
+            failed = true;
+#if RIMWORLD_13_OR_GREATER
+            throw new MissingMethodException($"Unable to find method with name {nameof(GenDraw)}.{nameof(GenDraw.DrawLineBetween)}({nameof(UnityEngine)}.{nameof(Vector3)}, {nameof(UnityEngine)}.{nameof(Vector3)}, {nameof(UnityEngine)}.{nameof(Material)}, float)");
+#else
+            throw new MissingMethodException($"Unable to find method with name {nameof(GenDraw)}.{nameof(GenDraw.DrawLineBetween)}({nameof(UnityEngine)}.{nameof(Vector3)}, {nameof(UnityEngine)}.{nameof(Vector3)}, {nameof(UnityEngine)}.{nameof(Material)})");
+#endif
+        }
+
+        if (ActiveLineField is null)
+        {
+            failed = true;
+            throw new MissingMethodException($"Unable to find field with name {nameof(LinkableColorsPatches)}.{nameof(Materials.ActiveLineMat)}()");
+        }
+
+        if (InactiveLineField is null)
+        {
+            failed = true;
+            throw new MissingMethodException($"Unable to find field with name {nameof(LinkableColorsPatches)}.{nameof(Materials.InactiveLineMat)}()");
+        }
+
+        if (PotentialLineField is null)
+        {
+            failed = true;
+            throw new MissingMethodException($"Unable to find field with name {nameof(LinkableColorsPatches)}.{nameof(Materials.PotentialLineMat)}()");
+        }
+
+        if (SupplantedLineField is null)
+        {
+            failed = true;
+            throw new MissingMethodException($"Unable to find field with name {nameof(LinkableColorsPatches)}.{nameof(Materials.OverriddenLineMat)}()");
+        }
+
+        if (InactiveFacilityLineMatField is null)
+        {
+            failed = true;
+            throw new MissingMethodException($"Unable to find field with name {nameof(CompAffectedByFacilities)}.{nameof(CompAffectedByFacilities.InactiveFacilityLineMat)}");
+        }
+
+        if (LineThicknessField is null)
+        {
+            failed = true;
+            throw new MissingMethodException($"Unable to find field with name {nameof(Settings)}.{nameof(Settings.LineThickness)}");
+        }
+
+        if (!LinkableColorsPatches.failed)
+        {
+            var harmony = new Harmony($"{nameof(Drummeur)}.{nameof(BetterLinkableColors)}");
+            harmony.PatchAll();
+        }
     }
 
     /// <summary>
@@ -118,42 +145,92 @@ public class LinkableColorsPatches
     /// </summary>
     /// <param name="instructions">A collection of <see cref="CodeInstruction" />s representing the IL code of the original method.</param>
     /// <returns>A collection of <see cref="CodeInstruction" />s representing the IL code of the new method.</returns>
-    internal static IEnumerable<CodeInstruction> PatchPostDrawExtraSectionOverlays(IEnumerable<CodeInstruction> instructions)
+    internal static IEnumerable<CodeInstruction> PatchPostDrawExtraSectionOverlays(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
-        foreach (CodeInstruction op in instructions)
+        // Original code:
+        //foreach (CodeInstruction op in instructions)
+        //{
+        //    // intercept the call to the 2adic DrawnLineBetween methods
+        //    // load the appropriate color and then call the 3adic method
+        //    if (op.Calls(DrawLineBetween2adic))
+        //    {
+        //        //yield return new CodeInstruction(OpCodes.Ldsfld, GreenLine);
+        //        yield return new CodeInstruction(OpCodes.Callvirt, ActiveLinePropertyGetter);
+        //
+        //        if (VersionControl.CurrentMinor >= 3)
+        //        {
+        //            yield return new CodeInstruction(OpCodes.Ldsfld, LinkableColorsPatches.LineThicknessField);
+        //        }
+        //
+        //        yield return new CodeInstruction(OpCodes.Call, DrawLineBetween3adic);
+        //    }
+        //    // the only Ldsfld is the one we want to intercept, so we don't need to check the operand
+        //    // load our own field instead of the original one
+        //    else if (op.Is(OpCodes.Ldsfld, null))
+        //    {
+        //        //yield return new CodeInstruction(OpCodes.Ldsfld, RedLine);
+        //        yield return new CodeInstruction(OpCodes.Callvirt, LinkableColorsPatches.InactiveLinePropertyGetter);
+        //    }
+        //    // make sure we use the correct line thickness
+        //    else if (op.Is(OpCodes.Ldc_R4, null))
+        //    {
+        //        yield return new CodeInstruction(OpCodes.Ldc_R4, LinkableColorsPatches.LineThicknessField);
+        //    }
+        //    // otherwise, we're good to go!
+        //    else
+        //    {
+        //        yield return op;
+        //    }
+        //}
+
+        if (failed)
         {
-            // intercept the call to the 2adic DrawnLineBetween methods
-            // load the appropriate color and then call the 3adic method
-            if (op.Calls(DrawLineBetween2adic))
-            {
-                //yield return new CodeInstruction(OpCodes.Ldsfld, GreenLine);
-                yield return new CodeInstruction(OpCodes.Ldsfld, ActiveLine);
-
-                if (VersionControl.CurrentMinor >= 3)
-                {
-                    yield return new CodeInstruction(OpCodes.Ldc_R4, LineThickness);
-                }
-
-                yield return new CodeInstruction(OpCodes.Call, DrawLineBetween3adic);
-            }
-            // the only Ldsfld is the one we want to intercept, so we don't need to check the operand
-            // load our own field instead of the original one
-            else if (op.Is(OpCodes.Ldsfld, null))
-            {
-                //yield return new CodeInstruction(OpCodes.Ldsfld, RedLine);
-                yield return new CodeInstruction(OpCodes.Ldsfld, InactiveLine);
-            }
-            // make sure we use the correct line thickness
-            else if (op.Is(OpCodes.Ldc_R4, null))
-            {
-                yield return new CodeInstruction(OpCodes.Ldc_R4, LineThickness);
-            }
-            // otherwise, we're good to go!
-            else
-            {
-                yield return op;
-            }
+            return instructions;
         }
+
+        CodeMatcher matcher = new CodeMatcher(instructions, generator)
+            .MatchStartForward([new CodeMatch(OpCodes.Call, LinkableColorsPatches.DrawLineBetween2adic)])
+            .ThrowIfInvalid("Failed to match for segment 1")
+            .RemoveInstructions(1)
+            .InsertAndAdvance(new CodeInstruction(OpCodes.Ldsfld, LinkableColorsPatches.ActiveLineField));
+
+        if (VersionControl.CurrentMinor >= 3)
+        {
+            _ = matcher.InsertAndAdvance(new CodeInstruction(OpCodes.Ldsfld, LinkableColorsPatches.LineThicknessField));
+        }
+
+        _ = matcher.InsertAndAdvance(new CodeInstruction(OpCodes.Call, LinkableColorsPatches.DrawLineBetween3adic));
+
+        if (VersionControl.CurrentMinor >= 3)
+        {
+            _ = matcher
+                .MatchStartForward([
+                    new CodeMatch(OpCodes.Ldsfld, LinkableColorsPatches.InactiveFacilityLineMatField),
+                    new CodeMatch(OpCodes.Ldc_R4, 0.2f),
+                    new CodeMatch(OpCodes.Call, LinkableColorsPatches.DrawLineBetween3adic),
+                ]).ThrowIfInvalid("Failed to match for segment 2")
+                .RemoveInstructions(3);
+        }
+        else
+        {
+            _ = matcher
+                .MatchStartForward([
+                    new CodeMatch(OpCodes.Ldsfld, LinkableColorsPatches.InactiveFacilityLineMatField),
+                    new CodeMatch(OpCodes.Call, LinkableColorsPatches.DrawLineBetween2adic),
+                ]).ThrowIfInvalid("Failed to match for segment 2")
+                .RemoveInstructions(2);
+        }
+
+        _ = matcher.InsertAndAdvance(new CodeInstruction(OpCodes.Ldsfld, LinkableColorsPatches.ActiveLineField));
+
+        if (VersionControl.CurrentMinor >= 3)
+        {
+            _ = matcher.InsertAndAdvance(new CodeInstruction(OpCodes.Ldsfld, LinkableColorsPatches.LineThicknessField));
+        }
+
+        return matcher
+                .InsertAndAdvance(new CodeInstruction(OpCodes.Call, LinkableColorsPatches.DrawLineBetween3adic))
+                .Instructions();
     }
 
     /// <summary>
@@ -162,33 +239,56 @@ public class LinkableColorsPatches
     /// </summary>
     /// <param name="instructions">A collection of <see cref="CodeInstruction" />s representing the IL code of the original method.</param>
     /// <returns>A collection of <see cref="CodeInstruction" />s representing the IL code of the new method.</returns>
-    internal static IEnumerable<CodeInstruction> PatchDrawLinesToPotentialThingsToLinkTo(IEnumerable<CodeInstruction> instructions)
+    internal static IEnumerable<CodeInstruction> PatchDrawLinesToPotentialThingsToLinkTo(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
-        // everything here is fine except that we want to intercept `call void Verse.GenDraw::DrawLineBetween(valuetype [UnityEngine.CoreModule]UnityEngine.Vector3, valuetype [UnityEngine.CoreModule]UnityEngine.Vector3)`
-        // and load a color first, and then use the 3-arg call instead of the 2-arg call
-        foreach (CodeInstruction op in instructions)
+        // Original code:
+        //// everything here is fine except that we want to intercept `call void Verse.GenDraw::DrawLineBetween(valuetype [UnityEngine.CoreModule]UnityEngine.Vector3, valuetype [UnityEngine.CoreModule]UnityEngine.Vector3)`
+        //// and load a color first, and then use the 3-arg call instead of the 2-arg call
+        //foreach (CodeInstruction op in instructions)
+        //{
+        //    // intercept
+        //    if (op.Calls(DrawLineBetween2adic))
+        //    {
+        //        // load the potential link Material
+        //        //yield return new CodeInstruction(OpCodes.Ldsfld, BlueLine);
+        //        yield return new CodeInstruction(OpCodes.Callvirt, LinkableColorsPatches.PotentialLinePropertyGetter);
+        //
+        //        // call DrawLineBetween(UnityEngine.Vector3, UnityEngine.Vector3, UnityEngine.Material)
+        //        if (VersionControl.CurrentMinor >= 3)
+        //        {
+        //            yield return new CodeInstruction(OpCodes.Ldsfld, LinkableColorsPatches.LineThicknessField);
+        //        }
+        //
+        //        yield return new CodeInstruction(OpCodes.Call, LinkableColorsPatches.DrawLineBetween3adic);
+        //    }
+        //    // fine to go
+        //    else
+        //    {
+        //        yield return op;
+        //    }
+        //}
+
+        // If finding the methods/fields failed just return the original instructions.
+        if (LinkableColorsPatches.failed)
         {
-            // intercept
-            if (op.Calls(DrawLineBetween2adic))
-            {
-                // load the potential link Material
-                //yield return new CodeInstruction(OpCodes.Ldsfld, BlueLine);
-                yield return new CodeInstruction(OpCodes.Ldsfld, PotentialLine);
-
-                // call DrawLineBetween(UnityEngine.Vector3, UnityEngine.Vector3, UnityEngine.Material)
-                if (VersionControl.CurrentMinor >= 3)
-                {
-                    yield return new CodeInstruction(OpCodes.Ldc_R4, LineThickness);
-                }
-
-                yield return new CodeInstruction(OpCodes.Call, DrawLineBetween3adic);
-            }
-            // fine to go
-            else
-            {
-                yield return op;
-            }
+            return instructions;
         }
+
+        CodeMatcher matcher = new CodeMatcher(instructions, generator)
+            .MatchStartForward([
+                new CodeMatch(OpCodes.Call, LinkableColorsPatches.DrawLineBetween2adic),
+            ]).ThrowIfInvalid("Failed to match for segment 1")
+            .RemoveInstructions(1)
+            .InsertAndAdvance(new CodeInstruction(OpCodes.Ldsfld, LinkableColorsPatches.PotentialLineField));
+
+        if (VersionControl.CurrentMinor >= 3)
+        {
+            _ = matcher.InsertAndAdvance(new CodeInstruction(OpCodes.Ldsfld, LinkableColorsPatches.LineThicknessField));
+        }
+
+        return matcher
+            .InsertAndAdvance(new CodeInstruction(OpCodes.Call, LinkableColorsPatches.DrawLineBetween3adic))
+            .Instructions();
     }
 }
 
@@ -203,9 +303,9 @@ public static class CompAffectedByFacilities_PostDrawExtraSelectionOverlays_Patc
     /// </summary>
     /// <param name="instructions">A collection of <see cref="CodeInstruction" />s representing the IL code of the original method.</param>
     /// <returns>A collection of <see cref="CodeInstruction" />s representing the IL code of the new method.</returns>
-    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
-        return LinkableColorsPatches.PatchPostDrawExtraSectionOverlays(instructions);
+        return LinkableColorsPatches.PatchPostDrawExtraSectionOverlays(instructions, generator);
     }
 }
 
@@ -220,14 +320,14 @@ public static class CompFacilities_PostDrawExtraSelectionOverlays_Patch
     /// </summary>
     /// <param name="instructions">A collection of <see cref="CodeInstruction" />s representing the IL code of the original method.</param>
     /// <returns>A collection of <see cref="CodeInstruction" />s representing the IL code of the new method.</returns>
-    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
-        return LinkableColorsPatches.PatchPostDrawExtraSectionOverlays(instructions);
+        return LinkableColorsPatches.PatchPostDrawExtraSectionOverlays(instructions, generator);
     }
 }
 
 /// <summary>
-/// A <see cref="HarmonyPatch" /> to patch the <see cref="CompAffectedByFacilities.DrawLinesToPotentialThingsToLinkTo()" /> method.
+/// A <see cref="HarmonyPatch" /> to patch the <see cref="CompAffectedByFacilities.DrawLinesToPotentialThingsToLinkTo(ThingDef,IntVec3,Rot4,Map)" /> method.
 /// </summary>
 [HarmonyPatch(typeof(CompAffectedByFacilities), nameof(CompAffectedByFacilities.DrawLinesToPotentialThingsToLinkTo))]
 public static class CompAffectedByFacilities_DrawLinesToPotentialThingsToLinkTo_Patch
@@ -237,14 +337,14 @@ public static class CompAffectedByFacilities_DrawLinesToPotentialThingsToLinkTo_
     /// </summary>
     /// <param name="instructions">A collection of <see cref="CodeInstruction" />s representing the IL code of the original method.</param>
     /// <returns>A collection of <see cref="CodeInstruction" />s representing the IL code of the new method.</returns>
-    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
-        return LinkableColorsPatches.PatchDrawLinesToPotentialThingsToLinkTo(instructions);
+        return LinkableColorsPatches.PatchDrawLinesToPotentialThingsToLinkTo(instructions, generator);
     }
 }
 
 /// <summary>
-/// A <see cref="HarmonyPatch" /> to patch the <see cref="CompFacility.DrawLinesToPotentialThingsToLinkTo()" /> method.
+/// A <see cref="HarmonyPatch" /> to patch the <see cref="CompFacility.DrawLinesToPotentialThingsToLinkTo(ThingDef,IntVec3,Rot4,Map)" /> method.
 /// </summary>
 [HarmonyPatch(typeof(CompFacility), nameof(CompFacility.DrawLinesToPotentialThingsToLinkTo))]
 public static class CompFacilities_DrawLinesToPotentialThingsToLinkTo_Patch
@@ -254,9 +354,9 @@ public static class CompFacilities_DrawLinesToPotentialThingsToLinkTo_Patch
     /// </summary>
     /// <param name="instructions">A collection of <see cref="CodeInstruction" />s representing the IL code of the original method.</param>
     /// <returns>A collection of <see cref="CodeInstruction" />s representing the IL code of the new method.</returns>
-    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
-        return LinkableColorsPatches.PatchDrawLinesToPotentialThingsToLinkTo(instructions);
+        return LinkableColorsPatches.PatchDrawLinesToPotentialThingsToLinkTo(instructions, generator);
     }
 }
 
@@ -273,23 +373,68 @@ public static class CompAffectedByFacilities_DrawRedLineToPotentiallySupplantedF
     /// </summary>
     /// <param name="instructions">A collection of <see cref="CodeInstruction" />s representing the IL code of the original method.</param>
     /// <returns>A collection of <see cref="CodeInstruction" />s representing the IL code of the new method.</returns>
-    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
     {
-        foreach (CodeInstruction op in instructions)
+        // Original code:
+        //var found = false;
+        // everything here is fine except that we want to intercept
+        // `call void Verse.GenDraw::DrawLineBetween(valuetype [UnityEngine.CoreModule]UnityEngine.Vector3, valuetype [UnityEngine.CoreModule]UnityEngine.Vector3)`
+        // and load a color first, and then use the 3-arg call instead of the 2-arg call
+        //foreach (CodeInstruction op in instructions)
+        //{
+        //    if (!found && op.Is(OpCodes.Ldsfld, LinkableColorsPatches.InactiveFacilityLineMatField))
+        //    {
+        //        //yield return new CodeInstruction(OpCodes.Ldsfld, LinkableColorsPatches.YellowLine);
+        //        yield return new CodeInstruction(OpCodes.Callvirt, LinkableColorsPatches.SupplantedLinePropertyGetter);
+        //        found = true;
+        //    }
+        //    else if (found && op.Is(OpCodes.Ldc_R4, 0.2f))
+        //    {
+        //        yield return new CodeInstruction(OpCodes.Ldsfld, LinkableColorsPatches.LineThicknessField);
+        //        found = false;
+        //    }
+        //    else
+        //    {
+        //        yield return op;
+        //    }
+        //}
+
+        // If finding the methods/fields failed just return the original instructions.
+        if (LinkableColorsPatches.failed)
         {
-            if (op.Is(OpCodes.Ldsfld, null))
-            {
-                //yield return new CodeInstruction(OpCodes.Ldsfld, LinkableColorsPatches.YellowLine);
-                yield return new CodeInstruction(OpCodes.Ldsfld, LinkableColorsPatches.SupplantedLine);
-            }
-            else if (op.Is(OpCodes.Ldc_R4, null))
-            {
-                yield return new CodeInstruction(OpCodes.Ldc_R4, LineThickness);
-            }
-            else
-            {
-                yield return op;
-            }
+            return instructions;
         }
+
+        var matcher = new CodeMatcher(instructions, generator);
+
+        if (VersionControl.CurrentMinor >= 3)
+        {
+            _ = matcher.MatchStartForward([
+                    new CodeMatch(OpCodes.Ldsfld, LinkableColorsPatches.InactiveFacilityLineMatField),
+                    new CodeMatch(OpCodes.Ldc_R4, 0.2f),
+                    new CodeMatch(OpCodes.Call, LinkableColorsPatches.DrawLineBetween3adic),
+                ])
+                .ThrowIfInvalid("Failed to match for segment 1")
+                .RemoveInstructions(3);
+        }
+        else
+        {
+            _ = matcher.MatchStartForward([
+                    new CodeMatch(OpCodes.Ldsfld, LinkableColorsPatches.InactiveFacilityLineMatField),
+                    new CodeMatch(OpCodes.Call, LinkableColorsPatches.DrawLineBetween3adic),
+                ])
+                .ThrowIfInvalid("Failed to match for segment 1")
+                .RemoveInstructions(2);
+        }
+
+        _ = matcher.InsertAndAdvance(new CodeInstruction(OpCodes.Ldsfld, LinkableColorsPatches.SupplantedLineField));
+
+        if (VersionControl.CurrentMinor >= 3)
+        {
+            _ = matcher.InsertAndAdvance(new CodeInstruction(OpCodes.Ldsfld, LinkableColorsPatches.LineThicknessField));
+        }
+
+        return matcher.InsertAndAdvance(new CodeInstruction(OpCodes.Call, LinkableColorsPatches.DrawLineBetween3adic))
+                .Instructions();
     }
 }
