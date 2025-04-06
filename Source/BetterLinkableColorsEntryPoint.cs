@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Verse;
 
-namespace drummeur.linkablecolors;
+namespace Drummeur.BetterLinkableColors;
 
 /// <summary>
 /// The entry point of the mod when loading the game.

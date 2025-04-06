@@ -1,5 +1,4 @@
-﻿namespace drummeur.linkablecolors;
-
+namespace Drummeur.BetterLinkableColors;
 /// <summary>
 /// An enum representing different states for the colors.
 /// </summary>

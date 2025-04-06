@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
-    <RootNamespace>drummeur.linkablecolors</RootNamespace>
+    <RootNamespace>Drummeur.BetterLinkableColors</RootNamespace>
     <AssemblyName>BetterLinkableColors</AssemblyName>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <LangVersion>preview</LangVersion>

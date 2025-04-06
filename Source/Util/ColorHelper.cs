@@ -1,7 +1,5 @@
-﻿using UnityEngine;
-
-namespace drummeur.linkablecolors.Util;
-
+using UnityEngine;
+namespace Drummeur.BetterLinkableColors.Util;
 /// <summary>
 /// A helper class for parsing colors.
 /// </summary>

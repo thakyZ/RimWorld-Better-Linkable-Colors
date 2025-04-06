@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using drummeur.linkablecolors.Util;
 using RimWorld;
 using UnityEngine;
 using Verse;
-
-namespace drummeur.linkablecolors;
-
+using RimWorld;
+using Drummeur.BetterLinkableColors.Util;
+namespace Drummeur.BetterLinkableColors;
 /// <summary>
 /// A class to contain the settings for the Better Linkable Colors mod.
 /// </summary>

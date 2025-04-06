@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
-
-namespace drummeur.linkablecolors;
-
+using Verse.Sound;
+using RimWorld;
+namespace Drummeur.BetterLinkableColors;
 /// <summary>
 /// A class to help provide UI components for the settings window.
 /// </summary>

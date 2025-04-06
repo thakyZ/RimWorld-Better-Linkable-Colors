@@ -1,17 +1,13 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using RimWorld;
 using UnityEngine;
 using Verse;
-using drummeur.linkablecolors.Util;
-using static drummeur.linkablecolors.LinkableColorsSettings;
-
-namespace drummeur.linkablecolors;
-
-// TODO: color picker for all these colors
-
+using RimWorld;
+using HarmonyLib;
+namespace Drummeur.BetterLinkableColors;
 /// <summary>
 /// A collection of methods to use for creating the better linkable colors patches.
 /// </summary>
