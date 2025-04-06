@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
@@ -34,7 +34,8 @@
   <ItemGroup>
     <Folder Include="..\$(Configuration)\Assemblies\" />
     <None Include="..\About\About.xml" Link="About\About.xml" />
-    <EditorConfigFiles Include=".editorconfig" />
+    <EditorConfigFiles Remove=".editorconfig" />
     <None Include=".editorconfig" />
+    <None Include="..\Languages\*\Keyed\*.xml"  />
   </ItemGroup>
 </Project>
