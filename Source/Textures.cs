@@ -22,12 +22,12 @@ public static class Textures
     public static Texture2D LineTex = null!;
 
     /// <summary>
-    /// Gets the texture for the color picker slider line.
+    /// Gets the texture for the _color picker slider line.
     /// </summary>
     public static Texture2D ColorHue = null!;
 
     /// <summary>
-    /// Gets the texture for the color picker position dot.
+    /// Gets the texture for the _color picker position dot.
     /// </summary>
     public static Texture2D ColorPicker = null!;
 #pragma warning restore IDE1006 // Naming Styles

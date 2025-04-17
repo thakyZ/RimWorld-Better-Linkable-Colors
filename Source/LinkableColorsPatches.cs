@@ -6,6 +6,7 @@ using UnityEngine;
 using Verse;
 using RimWorld;
 using HarmonyLib;
+// Ignore Spelling: Gauranlen, Plantable
 namespace Drummeur.BetterLinkableColors;
 /// <summary>
 /// A collection of methods to use for creating the better linkable colors patches.
@@ -71,7 +72,7 @@ public static class LinkableColorsPatches
 #endregion Method References
 
     /// <summary>
-    /// A <see langword="bool" /> that determines if finding methods or fields failed, so that the patching aborts safely.
+    /// A <see langword="bool" /> that determines if finding methods or fields _failed, so that the patching aborts safely.
     /// </summary>
     internal static readonly bool failed;
 
@@ -99,43 +100,47 @@ public static class LinkableColorsPatches
         if (ActiveLineField is null)
         {
             failed = true;
-            throw new MissingMethodException($"Unable to find field with name {nameof(LinkableColorsPatches)}.{nameof(Materials.ActiveLineMat)}()");
+            throw new MissingFieldException($"Unable to find field with name {nameof(LinkableColorsPatches)}.{nameof(Materials.ActiveLineMat)}()");
         }
 
         if (InactiveLineField is null)
         {
             failed = true;
-            throw new MissingMethodException($"Unable to find field with name {nameof(LinkableColorsPatches)}.{nameof(Materials.InactiveLineMat)}()");
+            throw new MissingFieldException($"Unable to find field with name {nameof(LinkableColorsPatches)}.{nameof(Materials.InactiveLineMat)}()");
         }
 
         if (PotentialLineField is null)
         {
             failed = true;
-            throw new MissingMethodException($"Unable to find field with name {nameof(LinkableColorsPatches)}.{nameof(Materials.PotentialLineMat)}()");
+            throw new MissingFieldException($"Unable to find field with name {nameof(LinkableColorsPatches)}.{nameof(Materials.PotentialLineMat)}()");
         }
 
         if (SupplantedLineField is null)
         {
             failed = true;
-            throw new MissingMethodException($"Unable to find field with name {nameof(LinkableColorsPatches)}.{nameof(Materials.OverriddenLineMat)}()");
+            throw new MissingFieldException($"Unable to find field with name {nameof(LinkableColorsPatches)}.{nameof(Materials.OverriddenLineMat)}()");
         }
 
         if (InactiveFacilityLineMatField is null)
         {
             failed = true;
-            throw new MissingMethodException($"Unable to find field with name {nameof(CompAffectedByFacilities)}.{nameof(CompAffectedByFacilities.InactiveFacilityLineMat)}");
+            throw new MissingFieldException($"Unable to find field with name {nameof(CompAffectedByFacilities)}.{nameof(CompAffectedByFacilities.InactiveFacilityLineMat)}");
         }
 
         if (LineThicknessField is null)
         {
             failed = true;
-            throw new MissingMethodException($"Unable to find field with name {nameof(Settings)}.{nameof(Settings.LineThickness)}");
+            throw new MissingFieldException($"Unable to find field with name {nameof(Settings)}.{nameof(Settings.LineThickness)}");
         }
 
         if (!LinkableColorsPatches.failed)
         {
             var harmony = new Harmony($"{nameof(Drummeur)}.{nameof(BetterLinkableColors)}");
-            harmony.PatchAll();
+            harmony.PatchAllUncategorized();
+            if (ModsConfig.IsActive("Mlie.ThisIsMine"))
+            {
+                harmony.PatchCategory("ThisIsMine");
+            }
         }
     }
 
@@ -151,7 +156,7 @@ public static class LinkableColorsPatches
         //foreach (CodeInstruction op in instructions)
         //{
         //    // intercept the call to the 2adic DrawnLineBetween methods
-        //    // load the appropriate color and then call the 3adic method
+        //    // load the appropriate _color and then call the 3adic method
         //    if (op.Calls(DrawLineBetween2adic))
         //    {
         //        //yield return new CodeInstruction(OpCodes.Ldsfld, GreenLine);
@@ -183,7 +188,7 @@ public static class LinkableColorsPatches
         //    }
         //}
 
-        if (failed)
+        if (LinkableColorsPatches.failed)
         {
             return instructions;
         }
@@ -228,9 +233,8 @@ public static class LinkableColorsPatches
             _ = matcher.InsertAndAdvance(new CodeInstruction(OpCodes.Ldsfld, LinkableColorsPatches.LineThicknessField));
         }
 
-        return matcher
-                .InsertAndAdvance(new CodeInstruction(OpCodes.Call, LinkableColorsPatches.DrawLineBetween3adic))
-                .Instructions();
+        return matcher.InsertAndAdvance(new CodeInstruction(OpCodes.Call, LinkableColorsPatches.DrawLineBetween3adic))
+            .Instructions();
     }
 
     /// <summary>
@@ -243,7 +247,7 @@ public static class LinkableColorsPatches
     {
         // Original code:
         //// everything here is fine except that we want to intercept `call void Verse.GenDraw::DrawLineBetween(valuetype [UnityEngine.CoreModule]UnityEngine.Vector3, valuetype [UnityEngine.CoreModule]UnityEngine.Vector3)`
-        //// and load a color first, and then use the 3-arg call instead of the 2-arg call
+        //// and load a _color first, and then use the 3-arg call instead of the 2-arg call
         //foreach (CodeInstruction op in instructions)
         //{
         //    // intercept
@@ -268,7 +272,7 @@ public static class LinkableColorsPatches
         //    }
         //}
 
-        // If finding the methods/fields failed just return the original instructions.
+        // If finding the methods/fields _failed just return the original instructions.
         if (LinkableColorsPatches.failed)
         {
             return instructions;
@@ -290,7 +294,126 @@ public static class LinkableColorsPatches
             .InsertAndAdvance(new CodeInstruction(OpCodes.Call, LinkableColorsPatches.DrawLineBetween3adic))
             .Instructions();
     }
+
+    /// <summary>
+    /// A Wrapper for <see cref="HarmonyTranspiler" /> for patching.
+    /// This us used to draw potential links to other things from the given placed object.
+    /// </summary>
+    /// <param name="instructions">A collection of <see cref="CodeInstruction" />s representing the IL code of the original method.</param>
+    /// <returns>A collection of <see cref="CodeInstruction" />s representing the IL code of the new method.</returns>
+    internal static IEnumerable<CodeInstruction> PatchDrawConnections(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    {
+        if (LinkableColorsPatches.failed)
+        {
+            return instructions;
+        }
+
+        CodeMatcher matcher = new CodeMatcher(instructions, generator)
+            .MatchStartForward([
+                new CodeMatch(OpCodes.Call, LinkableColorsPatches.DrawLineBetween3adic),
+            ]).ThrowIfInvalid("Failed to match for segment 1")
+            .RemoveInstructions(1)
+            .InsertAndAdvance(new CodeInstruction(OpCodes.Ldsfld, LinkableColorsPatches.PotentialLineField));
+
+        if (VersionControl.CurrentMinor >= 3)
+        {
+            _ = matcher.InsertAndAdvance(new CodeInstruction(OpCodes.Ldsfld, LinkableColorsPatches.LineThicknessField));
+        }
+
+        return matcher
+            .InsertAndAdvance(new CodeInstruction(OpCodes.Call, LinkableColorsPatches.DrawLineBetween3adic))
+            .Instructions();
+    }
 }
+
+/// <summary>
+/// A <see cref="HarmonyPatch" /> to patch the <see cref="CompShipLandingBeacon.PostDrawExtraSelectionOverlays()" /> method.
+/// </summary>
+[HarmonyPatch(typeof(CompShipLandingBeacon), nameof(CompShipLandingBeacon.PostDrawExtraSelectionOverlays))]
+public static class CompShipLandingBeacon_PostDrawExtraSelectionOverlays
+{
+    /// <summary>
+    /// A <see cref="HarmonyTranspiler" />.
+    /// </summary>
+    /// <param name="instructions">A collection of <see cref="CodeInstruction" />s representing the IL code of the original method.</param>
+    /// <returns>A collection of <see cref="CodeInstruction" />s representing the IL code of the new method.</returns>
+    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    {
+        return LinkableColorsPatches.PatchDrawConnections(instructions, generator);
+    }
+}
+
+#if RIMWORLD_13_OR_GREATER
+/// <summary>
+/// A <see cref="HarmonyPatch" /> to patch the <see cref="GauranlenUtility.DrawConnectionsAffectedByBuildingOverlay(Map, ThingDef, Faction, IntVec3, Rot4)" /> method.
+/// </summary>
+[HarmonyPatch(typeof(FocusStrengthOffset_BuildingDefs), nameof(GauranlenUtility.DrawConnectionsAffectedByBuildingOverlay))]
+public static class GauranlenUtility_DrawConnectionsAffectedByBuildingOverlay
+{
+    /// <summary>
+    /// A <see cref="HarmonyTranspiler" />.
+    /// </summary>
+    /// <param name="instructions">A collection of <see cref="CodeInstruction" />s representing the IL code of the original method.</param>
+    /// <returns>A collection of <see cref="CodeInstruction" />s representing the IL code of the new method.</returns>
+    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    {
+        return LinkableColorsPatches.PatchDrawConnections(instructions, generator);
+    }
+}
+
+/// <summary>
+/// A <see cref="HarmonyPatch" /> to patch the <see cref="PlaceWorker_ShowSpeakerConnections.DrawSurroundingsInfo(IntVec3)" /> method.
+/// </summary>
+[HarmonyPatch(typeof(CompPlantable), "DrawSurroundingsInfo")]
+public static class CompPlantable_DrawSurroundingsInfo_Patch
+{
+    /// <summary>
+    /// A <see cref="HarmonyTranspiler" />.
+    /// </summary>
+    /// <param name="instructions">A collection of <see cref="CodeInstruction" />s representing the IL code of the original method.</param>
+    /// <returns>A collection of <see cref="CodeInstruction" />s representing the IL code of the new method.</returns>
+    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    {
+        return LinkableColorsPatches.PatchDrawConnections(instructions, generator);
+    }
+}
+#endif
+
+#if RIMWORLD_15_OR_GREATER
+/// <summary>
+/// A <see cref="HarmonyPatch" /> to patch the <see cref="CompPsychicRitualSpot.PostDrawExtraSelectionOverlays()" /> method.
+/// </summary>
+[HarmonyPatch(typeof(CompPsychicRitualSpot), nameof(CompPsychicRitualSpot.PostDrawExtraSelectionOverlays))]
+public static class CompPsychicRitualSpot_PostDrawExtraSelectionOverlays
+{
+    /// <summary>
+    /// A <see cref="HarmonyTranspiler" />.
+    /// </summary>
+    /// <param name="instructions">A collection of <see cref="CodeInstruction" />s representing the IL code of the original method.</param>
+    /// <returns>A collection of <see cref="CodeInstruction" />s representing the IL code of the new method.</returns>
+    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    {
+        return LinkableColorsPatches.PatchDrawConnections(instructions, generator);
+    }
+}
+
+/// <summary>
+/// A <see cref="HarmonyPatch" /> to patch the <see cref="PlaceWorker_ShowSpeakerConnections.DrawConnections()" /> method.
+/// </summary>
+[HarmonyPatch(typeof(PlaceWorker_ShowSpeakerConnections), nameof(PlaceWorker_ShowSpeakerConnections.DrawConnections))]
+public static class PlaceWorker_ShowSpeakerConnections_DrawConnections_Patch
+{
+    /// <summary>
+    /// A <see cref="HarmonyTranspiler" />.
+    /// </summary>
+    /// <param name="instructions">A collection of <see cref="CodeInstruction" />s representing the IL code of the original method.</param>
+    /// <returns>A collection of <see cref="CodeInstruction" />s representing the IL code of the new method.</returns>
+    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    {
+        return LinkableColorsPatches.PatchDrawConnections(instructions, generator);
+    }
+}
+#endif
 
 /// <summary>
 /// A <see cref="HarmonyPatch" /> to patch the <see cref="CompAffectedByFacilities.PostDrawExtraSelectionOverlays()" /> method.
@@ -363,7 +486,7 @@ public static class CompFacilities_DrawLinesToPotentialThingsToLinkTo_Patch
 /// <summary>
 /// A <see cref="HarmonyPatch" /> to patch the <see cref="CompAffectedByFacilities.DrawRedLineToPotentiallySupplantedFacility()" /> method.
 /// </summary>
-/// <remarks>Yeah, well, it's going to be a yellow line now...</remarks>
+/// <remarks>Yeah, well, it's going to be a _yellow line now...</remarks>
 [StaticConstructorOnStartup]
 [HarmonyPatch(typeof(CompAffectedByFacilities), nameof(CompAffectedByFacilities.DrawRedLineToPotentiallySupplantedFacility))]
 public static class CompAffectedByFacilities_DrawRedLineToPotentiallySupplantedFacility_Patch
@@ -379,7 +502,7 @@ public static class CompAffectedByFacilities_DrawRedLineToPotentiallySupplantedF
         //var found = false;
         // everything here is fine except that we want to intercept
         // `call void Verse.GenDraw::DrawLineBetween(valuetype [UnityEngine.CoreModule]UnityEngine.Vector3, valuetype [UnityEngine.CoreModule]UnityEngine.Vector3)`
-        // and load a color first, and then use the 3-arg call instead of the 2-arg call
+        // and load a _color first, and then use the 3-arg call instead of the 2-arg call
         //foreach (CodeInstruction op in instructions)
         //{
         //    if (!found && op.Is(OpCodes.Ldsfld, LinkableColorsPatches.InactiveFacilityLineMatField))
@@ -399,7 +522,7 @@ public static class CompAffectedByFacilities_DrawRedLineToPotentiallySupplantedF
         //    }
         //}
 
-        // If finding the methods/fields failed just return the original instructions.
+        // If finding the methods/fields _failed just return the original instructions.
         if (LinkableColorsPatches.failed)
         {
             return instructions;

@@ -18,22 +18,22 @@ public static class Materials
 
 #pragma warning disable IDE1006 // Naming Styles
     /// <summary>
-    /// Gets the value for the active line using the reference to the material from the <see cref="MaterialPool" /> using the value from the <see cref="Settings.ActiveColorLabel" /> setting.
+    /// Gets the _value for the active line using the reference to the material from the <see cref="MaterialPool" /> using the _value from the <see cref="Settings.ActiveColorLabel" /> setting.
     /// </summary>
     internal static Material ActiveLineMat = null!;
 
     /// <summary>
-    /// Gets the value for the inactive line using the reference to the material from the <see cref="MaterialPool" /> using the value from the <see cref="Settings.InactiveColorLabel" /> setting.
+    /// Gets the _value for the inactive line using the reference to the material from the <see cref="MaterialPool" /> using the _value from the <see cref="Settings.InactiveColorLabel" /> setting.
     /// </summary>
     internal static Material InactiveLineMat = null!;
 
     /// <summary>
-    /// Gets the value for the potential line using the reference to the material from the <see cref="MaterialPool" /> using the value from the <see cref="Settings.PotentialColorLabel" /> setting.
+    /// Gets the _value for the potential line using the reference to the material from the <see cref="MaterialPool" /> using the _value from the <see cref="Settings.PotentialColorLabel" /> setting.
     /// </summary>
     internal static Material PotentialLineMat = null!;
 
     /// <summary>
-    /// Gets the value for the supplanted line using the reference to the material from the <see cref="MaterialPool" /> using the value from the <see cref="Settings.OverriddenColorLabel" /> setting.
+    /// Gets the _value for the supplanted line using the reference to the material from the <see cref="MaterialPool" /> using the _value from the <see cref="Settings.OverriddenColorLabel" /> setting.
     /// </summary>
     internal static Material OverriddenLineMat = null!;
 #pragma warning restore IDE1006 // Naming Styles

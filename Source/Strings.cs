@@ -30,28 +30,36 @@ internal static class Strings
     public static readonly string SettingsUseSolidColorsLabel = "BetterLinkableColors.Settings.UseSolidColors.Label".TranslateSimple();
 
     /// <summary>
-    /// Gets the <see langword="string" /> for the settings color customization category title.
+    /// Gets the <see langword="string" /> for the settings _color customization category title.
     /// <para description="default">Color Customization</para>
     /// </summary>
     public static readonly string SettingsCategoryColorCustomizationTitle = "BetterLinkableColors.Settings.ColorCustomization.Title".TranslateSimple();
 
     /// <summary>
-    /// Gets the <see langword="string" /> for the settings color customization category description.
-    /// <para description="default">
-    /// You can use any color name recognized by Unity (such as red, cyan, blue, ...)
-    /// or a hexadecimal literal starting with '#' (such as #FF0000, #00FFFF, #0000FF, ...),
-    /// but the text entry field will always show the hex literal.
-    /// </para>
+    /// Gets the <see langword="string" /> for the settings _color customization category description.
+    /// <para description="default">You can use any _color name recognized by Unity (such as _red, _cyan, _blue, ...)</para>
     /// </summary>
-    public static readonly string SettingsCategoryColorCustomizationDescription = "BetterLinkableColors.Settings.ColorCustomization.Description".TranslateSimple();
+    public static readonly string SettingsCategoryColorCustomizationDescription1 = "BetterLinkableColors.Settings.ColorCustomization.Description1".TranslateSimple();
 
     /// <summary>
-    /// Gets the <see langword="string" /> for the label of the active link color selection.
+    /// Gets the <see langword="string" /> for the settings _color customization category description.
+    /// <para description="default">or a hexadecimal literal starting with '#' (such as #FF0000, #00FFFF, #0000FF, ...),</para>
+    /// </summary>
+    public static readonly string SettingsCategoryColorCustomizationDescription2 = "BetterLinkableColors.Settings.ColorCustomization.Description2".TranslateSimple();
+
+    /// <summary>
+    /// Gets the <see langword="string" /> for the settings _color customization category description.
+    /// <para description="default">but the text entry field will always show the _hex literal.</para>
+    /// </summary>
+    public static readonly string SettingsCategoryColorCustomizationDescription3 = "BetterLinkableColors.Settings.ColorCustomization.Description3".TranslateSimple();
+
+    /// <summary>
+    /// Gets the <see langword="string" /> for the label of the active link _color selection.
     /// <para description="default">Active Link Color</para>
     /// </summary>
     public static readonly string SettingsActiveLinkColorLabel = "BetterLinkableColors.Settings.ActiveLinkColor.Label".TranslateSimple();
     /// <summary>
-    /// Gets the <see langword="string" /> for the sub-label of the active link color selection.
+    /// Gets the <see langword="string" /> for the sub-label of the active link _color selection.
     /// <para description="default">Active Link Color</para>
     /// </summary>
     public static readonly string SettingsActiveLinkColorSubLabel = "BetterLinkableColors.Settings.ActiveLinkColor.SubLabel".TranslateSimple();
@@ -62,12 +70,12 @@ internal static class Strings
     public static readonly string SettingsActiveTextEntryLabel = $"{"BetterLinkableColors.Settings.ActiveTextEntry.Label".TranslateSimple(),-1}";
 
     /// <summary>
-    /// Gets the <see langword="string" /> for the label of the inactive link color selection.
+    /// Gets the <see langword="string" /> for the label of the inactive link _color selection.
     /// <para description="default">Inactive Link Color</para>
     /// </summary>
     public static readonly string SettingsInactiveLinkColorLabel = "BetterLinkableColors.Settings.InactiveLinkColor.Label".TranslateSimple();
     /// <summary>
-    /// Gets the <see langword="string" /> for the sub-label of the inactive link color selection.
+    /// Gets the <see langword="string" /> for the sub-label of the inactive link _color selection.
     /// <para description="default">Inactive Link Color</para>
     /// </summary>
     public static readonly string SettingsInactiveLinkColorSubLabel = "BetterLinkableColors.Settings.InactiveLinkColor.SubLabel".TranslateSimple();
@@ -78,12 +86,12 @@ internal static class Strings
     public static readonly string SettingsInactiveTextEntryLabel = $"{"BetterLinkableColors.Settings.InactiveTextEntry.Label".TranslateSimple(),-1}";
 
     /// <summary>
-    /// Gets the <see langword="string" /> for the label of the potential link color selection.
+    /// Gets the <see langword="string" /> for the label of the potential link _color selection.
     /// <para description="default">Potential Link Color</para>
     /// </summary>
     public static readonly string SettingsPotentialLinkColorLabel = "BetterLinkableColors.Settings.PotentialLinkColor.Label".TranslateSimple();
     /// <summary>
-    /// Gets the <see langword="string" /> for the sub-label of the potential link color selection.
+    /// Gets the <see langword="string" /> for the sub-label of the potential link _color selection.
     /// <para description="default">Potential Link Color</para>
     /// </summary>
     public static readonly string SettingsPotentialLinkColorSubLabel = "BetterLinkableColors.Settings.PotentialLinkColor.SubLabel".TranslateSimple();
@@ -94,12 +102,12 @@ internal static class Strings
     public static readonly string SettingsPotentialTextEntryLabel = $"{"BetterLinkableColors.Settings.PotentialTextEntry.Label".TranslateSimple(),-1}";
 
     /// <summary>
-    /// Gets the <see langword="string" /> for the label of the overridden link color selection.
+    /// Gets the <see langword="string" /> for the label of the overridden link _color selection.
     /// <para description="default">Overridden Link Color</para>
     /// </summary>
     public static readonly string SettingsOverriddenLinkColorLabel = "BetterLinkableColors.Settings.OverriddenLinkColor.Label".TranslateSimple();
     /// <summary>
-    /// Gets the <see langword="string" /> for the sub-label of the overridden link color selection.
+    /// Gets the <see langword="string" /> for the sub-label of the overridden link _color selection.
     /// <para description="default">Overridden Link Color</para>
     /// </summary>
     public static readonly string SettingsOverriddenLinkColorSubLabel = "BetterLinkableColors.Settings.OverriddenLinkColor.SubLabel".TranslateSimple();
@@ -110,7 +118,7 @@ internal static class Strings
     public static readonly string SettingsOverriddenTextEntryLabel = $"{"BetterLinkableColors.Settings.OverriddenTextEntry.Label".TranslateSimple(),-1}";
 
     /// <summary>
-    /// Gets the <see langword="string" /> for the label that shows when a text box has an invalid color.
+    /// Gets the <see langword="string" /> for the label that shows when a text box has an invalid _color.
     /// <para description="default">Invalid Color</para>
     /// </summary>
     public static readonly string SettingsInvalidColorSubLabel = $"{"BetterLinkableColors.Settings.InvalidColor.SubLabel".TranslateSimple(),2}";
@@ -169,7 +177,7 @@ internal static class Strings
     /// </summary>
     public static readonly string SettingsTopRowHeightSliderLabel = "BetterLinkableColors.Settings.TopRowHeightSlider.Label".TranslateSimple();
     /// <summary>
-    /// Gets the <see langword="string" /> for the label the slider for modifying the solid color button margin.
+    /// Gets the <see langword="string" /> for the label the slider for modifying the solid _color button margin.
     /// <para description="default">Color Button Margin</para>
     /// </summary>
     public static readonly string SettingsColorMarginSliderLabel = "BetterLinkableColors.Settings.ColorMarginSlider.Label".TranslateSimple();

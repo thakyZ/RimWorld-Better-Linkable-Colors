@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>Drummeur.BetterLinkableColors</RootNamespace>
     <AssemblyName>BetterLinkableColors</AssemblyName>
@@ -9,22 +9,18 @@
     <Nullable>enable</Nullable>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <OutputPath>..\$(Configuration)\Assemblies\</OutputPath>
-    <Configurations>$(Configurations);1.2;1.3;1.4;1.5</Configurations>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <OutputPath>..\1.5\Assemblies\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-    <OutputPath>..\1.5\Assemblies\</OutputPath>
+    <Configurations>1.2;1.3;1.4;1.5</Configurations>
+    <!-- We ignore MSB3052 because MSBuild doesn't like us using A configuration with the name '1.#'. -->
+    <NoWarn>$(NoWarn);MSB3052</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
-    <DefineConstants Condition="'$(Configuration)'=='Debug'">$(DefineConstants);DEBUG</DefineConstants>
-    <DefineConstants Condition="'$(Configuration)'=='Release' OR '$(Configuration)'=='Debug' OR '$(Configuration)'=='1.5'">$(DefineConstants);RIMWORLD_15;RIMWORLD_15_OR_LESS;RIMWORLD_15_OR_GREATER;RIMWORLD_14_OR_GREATER;RIMWORLD_13_OR_GREATER;RIMWORLD_12_OR_GREATER</DefineConstants>
+    <DefineConstants Condition="'$(Configuration)'=='1.5'">$(DefineConstants);DEBUG;RIMWORLD_15;RIMWORLD_15_OR_LESS;RIMWORLD_15_OR_GREATER;RIMWORLD_14_OR_GREATER;RIMWORLD_13_OR_GREATER;RIMWORLD_12_OR_GREATER</DefineConstants>
     <DefineConstants Condition="'$(Configuration)'=='1.4'">$(DefineConstants);RIMWORLD_14;RIMWORLD_15_OR_LESS;RIMWORLD_14_OR_LESS;RIMWORLD_14_OR_GREATER;RIMWORLD_13_OR_GREATER;RIMWORLD_12_OR_GREATER</DefineConstants>
     <DefineConstants Condition="'$(Configuration)'=='1.3'">$(DefineConstants);RIMWORLD_13;RIMWORLD_15_OR_LESS;RIMWORLD_14_OR_LESS;RIMWORLD_13_OR_LESS;RIMWORLD_13_OR_GREATER;RIMWORLD_12_OR_GREATER</DefineConstants>
     <DefineConstants Condition="'$(Configuration)'=='1.2'">$(DefineConstants);RIMWORLD_12;RIMWORLD_15_OR_LESS;RIMWORLD_14_OR_LESS;RIMWORLD_13_OR_LESS;RIMWORLD_12_OR_LESS;RIMWORLD_12_OR_GREATER</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ThisIsMine" Private="False" HintPath="../../ThisIsMine/$(Configuration)/Assemblies/ThisIsMine.dll" />
     <PackageReference Condition="'$(Configuration)'=='1.5'" Include="Krafs.Rimworld.Ref" Version="1.5.*" />
     <PackageReference Condition="'$(Configuration)'=='1.4'" Include="Krafs.Rimworld.Ref" Version="1.4.*" />
     <PackageReference Condition="'$(Configuration)'=='1.3'" Include="Krafs.Rimworld.Ref" Version="1.3.*" />
@@ -36,6 +32,11 @@
     <None Include="..\About\About.xml" Link="About\About.xml" />
     <EditorConfigFiles Remove=".editorconfig" />
     <None Include=".editorconfig" />
-    <None Include="..\Languages\*\Keyed\*.xml"  />
+    <None Include="..\Languages\*\Keyed\*.xml" />
   </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <Target Name="DebugDefineConstants" AfterTargets="Build">
+      <Message Text="DefineConstants=&quot;$(DefineConstants)&quot;" Importance="High" />
+  </Target>
 </Project>

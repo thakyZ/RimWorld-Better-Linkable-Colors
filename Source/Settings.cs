@@ -56,29 +56,29 @@ public class Settings : ModSettings
     public static ColorLabel OverriddenColorLabel = ColorLabel.YELLOW;
 
     /// <summary>
-    /// A <see langword="string" /> representing a color to use for the link lines that are active.
+    /// A <see langword="string" /> representing a _color to use for the link lines that are active.
     /// </summary>
     public static Color ActiveColor = ColorHelper.Defaults.ActiveColor;
 
     /// <summary>
-    /// A <see langword="string" /> representing a color to use for the link lines that are inactive.
+    /// A <see langword="string" /> representing a _color to use for the link lines that are inactive.
     /// </summary>
     public static Color InactiveColor = ColorHelper.Defaults.InactiveColor;
 
     /// <summary>
-    /// A <see langword="string" /> representing a color to use for the link lines that can be connected when attempting to place a blueprint.
+    /// A <see langword="string" /> representing a _color to use for the link lines that can be connected when attempting to place a blueprint.
     /// </summary>
     public static Color PotentialColor = ColorHelper.Defaults.PotentialColor;
 
     /// <summary>
-    /// A <see langword="string" /> representing a color to use for the link lines that are being replace with another linkage when attempting to place a blueprint.
+    /// A <see langword="string" /> representing a _color to use for the link lines that are being replace with another linkage when attempting to place a blueprint.
     /// </summary>
     public static Color OverriddenColor = ColorHelper.Defaults.OverriddenColor;
 
     public const int MAX_PALETTES = 64;
 
     /// <summary>
-    /// 
+    /// A <see cref="List{Color}" /> of saved palette colors.
     /// </summary>
     public static List<Color> SavedPalette = new(MAX_PALETTES);
 
@@ -114,7 +114,7 @@ public class Settings : ModSettings
     public static float checkBoxOffset = -190f;
 
     /// <summary>
-    /// A <see langword="float" /> to set the offset for the solid color margin.
+    /// A <see langword="float" /> to set the offset for the solid _color margin.
     /// </summary>
     public static float colorMargin = 0.0f;
 
@@ -125,111 +125,6 @@ public class Settings : ModSettings
     public static float devRowHeight = 30.0f;
 #endif
 
-#if RIMWORLD_12_OR_LESS
-    /// <summary>
-    /// Renders the settings window contents.
-    /// </summary>
-    /// <param name="rect">A <see cref="Rect" /> that determines the bounds of the settings window.</param>
-    public void DoWindowContents(Rect rect)
-    {
-        Listing_Standard options = new Listing_Standard();
-        Color defaultColor = GUI.color;
-
-        options.Begin(rect);
-
-        Text.Font = GameFont.Medium;
-        Text.Anchor = TextAnchor.MiddleCenter;
-        GUI.color = Color.yellow;
-        _ = options.Label("Better Linkable Colors Settings");
-        GUI.color = defaultColor;
-
-        Text.Font = GameFont.Small;
-        Text.Anchor = TextAnchor.UpperLeft;
-
-        var defaultWidth = options.ColumnWidth;
-
-        options.Gap();
-
-        options.ColumnWidth = (defaultWidth / 2) + CheckBoxOffset;
-
-        if (VersionControl.CurrentMinor >= 3)
-        {
-            options.TextFieldNumericLabeled("Line Thickness      ", ref LineThickness, ref _LineThicknessBuffer, 0);
-        }
-        else
-        {
-            options.ColumnWidth = defaultWidth;
-            _ = options.Label("All changes require a restart to take effect.");
-            options.ColumnWidth = (defaultWidth / 2) + CheckBoxOffset;
-        }
-
-        options.CheckboxLabeled("Use Solid Colors for Line Shader", ref UseSolidLineShader);
-
-#if DEBUG
-        options.ColumnWidth = defaultWidth / 3;
-
-        options.SliderLabeledSettable("Line Thickness", ref LineThickness, ref _LineThicknessBuffer, el => el.ToString("F3"), 0, 1);
-#endif
-
-        options.ColumnWidth = defaultWidth;
-
-        options.GapLine();
-
-        options.ColumnWidth = (defaultWidth / 4) + XOffset;
-
-        options.AddLabeledRadioList("Active Link Color", Enum.GetValues(typeof(ColorLabel)).Cast<ColorLabel>(), ref ActiveColorLabel, (ColorLabel el) => new TaggedString(el.ToString()).CapitalizeFirst().RawText.ToLower());
-
-        options.ColumnWidth = defaultWidth;
-
-        options.GapLine();
-
-        if (VersionControl.CurrentMinor >= 3)
-        {
-            options.Label("All changes require a restart to take effect.");
-        }
-
-#if DEBUG
-        options.Gap(100);
-        options.SliderLabeled("OffsetX", ref XOffset, el => Math.Round(el, 2).ToString(), -100, -14);
-        options.SliderLabeled("OffsetY", ref YOffset, el => Math.Round(el, 2).ToString(), 90, 120);
-        options.SliderLabeled("cbxOffset", ref CheckBoxOffset, el => Math.Round(el, 2).ToString(), -500, 10);
-#endif
-
-        options.ColumnWidth = (defaultWidth / 4) + XOffset;
-
-        options.NewColumn();
-        options.Gap(YOffset);
-
-        options.AddLabeledRadioList("Inactive Link Color", Enum.GetValues(typeof(ColorLabel)).Cast<ColorLabel>(), ref InactiveColorLabel, (ColorLabel el) => new TaggedString(el.ToString()).CapitalizeFirst().RawText.ToLower());
-
-#if DEBUG
-        options.ColumnWidth = defaultWidth;
-        options.GapLine();
-
-        options.ColumnWidth = (defaultWidth / 4) + XOffset;
-#endif
-
-        options.NewColumn();
-        options.Gap(YOffset);
-
-        options.AddLabeledRadioList("Potential Link Color", Enum.GetValues(typeof(ColorLabel)).Cast<ColorLabel>(), ref PotentialColorLabel, (ColorLabel el) => new TaggedString(el.ToString()).CapitalizeFirst().RawText.ToLower());
-#if DEBUG
-        options.GapLine();
-#endif
-
-        options.NewColumn();
-        options.Gap(YOffset);
-
-        options.AddLabeledRadioList("Overridden Link Color", Enum.GetValues(typeof(ColorLabel)).Cast<ColorLabel>(), ref SupplantedColorLabel, (ColorLabel el) => new TaggedString(el.ToString()).CapitalizeFirst().RawText.ToLower());
-#if DEBUG
-        options.GapLine();
-#endif
-
-        options.ColumnWidth = defaultWidth;
-
-        options.End();
-    }
-#else
     /// <summary>
     /// Renders the settings window contents.
     /// </summary>
@@ -238,8 +133,12 @@ public class Settings : ModSettings
     {
         var options = new Listing_Standard();
         var defaultWidth = rect.width;
+#if DEBUG
         var defaultHeight = rect.height;
         rect.SplitHorizontally(defaultHeight - devRowHeight, out Rect optionsRowRect, out Rect devRowRect);
+#else
+        Rect optionsRowRect = rect;
+#endif
         options.Begin(optionsRowRect);
         Color defaultColor = GUI.color;
         var bottomHeight = optionsRowRect.height - topRowHeight;
@@ -252,7 +151,7 @@ public class Settings : ModSettings
         GUI.color = Color.yellow;
 
         _ = topRow.Label(Strings.SettingsCategoryTitle);
-        _ = topRow.SubLabel(Strings.SettingsRequireRestartLabel, 1f);
+        //_ = topRow.SubLabel(Strings.SettingsRequireRestartLabel, 1f);
 
         GUI.color = defaultColor;
 
@@ -277,8 +176,9 @@ public class Settings : ModSettings
         Text.Font = GameFont.Medium;
 
         _ = topRow.Label(Strings.SettingsCategoryColorCustomizationTitle);
-
-        _ = topRow.SubLabel(Strings.SettingsCategoryColorCustomizationDescription, 1f);
+        _ = topRow.SubLabel(Strings.SettingsCategoryColorCustomizationDescription1, 1f);
+        _ = topRow.SubLabel(Strings.SettingsCategoryColorCustomizationDescription2, 1f);
+        _ = topRow.SubLabel(Strings.SettingsCategoryColorCustomizationDescription3, 1f);
 
         Text.Font = GameFont.Small;
         Text.Anchor = TextAnchor.UpperLeft;
@@ -294,7 +194,7 @@ public class Settings : ModSettings
 
         if (bottomRow.DrawButtonSolidColorLabeled(Strings.SettingsOverriddenLinkColorLabel, ActiveColor))
         {
-            Find.WindowStack.Add(new Dialog_ColorWheel(ActiveColor, (Color color) => ActiveColor = color));
+            Find.WindowStack.Add(new Dialog_ColorPicker(ActiveColor, (Color color) => ActiveColor = color));
         }
 
         //bottomRow.AddLabeledRadioList(Strings.SettingsActiveLinkColorLabel, Enum.GetValues(typeof(ColorLabel)).Cast<ColorLabel>(), ref ActiveColorLabel, el => el.ToString().ToLower());
@@ -317,7 +217,7 @@ public class Settings : ModSettings
 
         if (bottomRow.DrawButtonSolidColorLabeled(Strings.SettingsInactiveLinkColorLabel, InactiveColor))
         {
-            Find.WindowStack.Add(new Dialog_ColorWheel(InactiveColor, (Color color) => InactiveColor = color));
+            Find.WindowStack.Add(new Dialog_ColorPicker(InactiveColor, (Color color) => InactiveColor = color));
         }
 
         //bottomRow.AddLabeledRadioList(Strings.SettingsInactiveLinkColorLabel, Enum.GetValues(typeof(ColorLabel)).Cast<ColorLabel>(), ref InactiveColorLabel, el => el.ToString().ToLower());
@@ -340,7 +240,7 @@ public class Settings : ModSettings
 
         if (bottomRow.DrawButtonSolidColorLabeled(Strings.SettingsOverriddenLinkColorLabel, PotentialColor))
         {
-            Find.WindowStack.Add(new Dialog_ColorWheel(PotentialColor, (Color color) => PotentialColor = color));
+            Find.WindowStack.Add(new Dialog_ColorPicker(PotentialColor, (Color color) => PotentialColor = color));
         }
 
         //bottomRow.AddLabeledRadioList(Strings.SettingsPotentialLinkColorLabel, Enum.GetValues(typeof(ColorLabel)).Cast<ColorLabel>(), ref PotentialColorLabel, el => el.ToString().ToLower());
@@ -361,7 +261,7 @@ public class Settings : ModSettings
 
         if (bottomRow.DrawButtonSolidColorLabeled(Strings.SettingsOverriddenLinkColorLabel, OverriddenColor))
         {
-            Find.WindowStack.Add(new Dialog_ColorWheel(OverriddenColor, (Color color) => OverriddenColor = color));
+            Find.WindowStack.Add(new Dialog_ColorPicker(OverriddenColor, (Color color) => OverriddenColor = color));
         }
 
         //bottomRow.AddLabeledRadioList(Strings.SettingsOverriddenLinkColorLabel, Enum.GetValues(typeof(ColorLabel)).Cast<ColorLabel>(), ref OverriddenColorLabel, el => el.ToString().ToLower());
@@ -396,15 +296,16 @@ public class Settings : ModSettings
                 window.draggable = true;
                 var devOptions = new Listing_Standard();
                 devOptions.Begin(_rect);
-                devOptions.SliderLabeled(Strings.SettingsOffsetXSliderLabel, ref xOffset, (float el) => $"{el:F2}", -100.0f, -14.0f);
-                devOptions.SliderLabeled(Strings.SettingsOffsetYSliderLabel, ref yOffset, (float el) => $"{el:F2}", 90.0f, 120.0f);
-                devOptions.SliderLabeled(Strings.SettingsCheckBoxOffsetSliderLabel, ref checkBoxOffset, (float el) => $"{el:F2}", -500.0f, 10.0f);
-                devOptions.SliderLabeled(Strings.SettingsTopRowHeightSliderLabel, ref topRowHeight, (float el) => $"{el:F2}", 0.0f, defaultHeight - devRowHeight);
-                devOptions.SliderLabeled(Strings.SettingsColorMarginSliderLabel, ref colorMargin, (float el) => $"{el:F2}", 0.0f, 1.0f);
-                devOptions.SliderLabeled(Strings.SettingsDevButtonLabel, ref devRowHeight, (float el) => $"{el:F2}", 0.0f, defaultHeight - optionsRowRect.height);
+                devOptions.SliderLabeled(Strings.SettingsOffsetXSliderLabel, ref xOffset, (float el) => $"{el:F2}", -100.0f, -14.0f, margin: 0.3f);
+                devOptions.SliderLabeled(Strings.SettingsOffsetYSliderLabel, ref yOffset, (float el) => $"{el:F2}", 90.0f, 120.0f, margin: 0.3f);
+                devOptions.SliderLabeled(Strings.SettingsCheckBoxOffsetSliderLabel, ref checkBoxOffset, (float el) => $"{el:F2}", -500.0f, 10.0f, margin: 0.3f);
+                devOptions.SliderLabeled(Strings.SettingsTopRowHeightSliderLabel, ref topRowHeight, (float el) => $"{el:F2}", 0.0f, defaultHeight - devRowHeight, margin: 0.3f);
+                devOptions.SliderLabeled(Strings.SettingsColorMarginSliderLabel, ref colorMargin, (float el) => $"{el:F2}", 0.0f, 1.0f, margin: 0.3f);
+                devOptions.SliderLabeled(Strings.SettingsDevButtonLabel, ref devRowHeight, (float el) => $"{el:F2}", 0.0f, defaultHeight - optionsRowRect.height, margin: 0.3f);
                 devOptions.End();
             }));
         }
+
         devRow.End();
 #endif
     }
@@ -424,5 +325,4 @@ public class Settings : ModSettings
         Scribe_Values.Look(ref OverriddenColor, $"{nameof(BetterLinkableColors)}_{nameof(ColorHelper.Defaults.OverriddenColor)}", ColorHelper.Defaults.OverriddenColor);
         Scribe_Collections.Look(ref SavedPalette, $"{nameof(BetterLinkableColors)}_{nameof(ColorHelper.Defaults.ActiveColor)}", ctorArgs: MAX_PALETTES);
     }
-#endif
 }

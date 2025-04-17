@@ -9,7 +9,9 @@
   <BetterLinkableColors.Settings.UseSolidColors.Label>Use Solid Colors for Line Shader</BetterLinkableColors.Settings.UseSolidColors.Label>
 
   <BetterLinkableColors.Settings.ColorCustomization.Title>Color Customization</BetterLinkableColors.Settings.ColorCustomization.Title>
-  <BetterLinkableColors.Settings.ColorCustomization.Description>You can use any color name recognized by Unity (such as red, cyan, blue, ...) or a hexadecimal literal starting with '#' (such as #FF0000, #00FFFF, #0000FF, ...), but the text entry field will always show the hex literal.</BetterLinkableColors.Settings.ColorCustomization.Description>
+  <BetterLinkableColors.Settings.ColorCustomization.Description1>You can use any color name recognized by Unity (such as red, cyan, blue, ...)</BetterLinkableColors.Settings.ColorCustomization.Description1>
+  <BetterLinkableColors.Settings.ColorCustomization.Description2>or a hexadecimal literal starting with '#' (such as #FF0000, #00FFFF, #0000FF, ...),</BetterLinkableColors.Settings.ColorCustomization.Description2>
+  <BetterLinkableColors.Settings.ColorCustomization.Description3>but the text entry field will always show the hex literal.</BetterLinkableColors.Settings.ColorCustomization.Description3>
 
   <BetterLinkableColors.Settings.OffsetXSlider.Label>Offset X</BetterLinkableColors.Settings.OffsetXSlider.Label>
   <BetterLinkableColors.Settings.OffsetYSlider.Label>Offset Y</BetterLinkableColors.Settings.OffsetYSlider.Label>
