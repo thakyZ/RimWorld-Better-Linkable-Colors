@@ -75,7 +75,10 @@ public class Settings : ModSettings
     /// </summary>
     public static Color OverriddenColor = ColorHelper.Defaults.OverriddenColor;
 
-    public const int MAX_PALETTES = 64;
+    /// <summary>
+    /// A constant <see langword="int" /> that represents the maximum number of saved palettes.
+    /// </summary>
+    private const int MAX_PALETTES = 64;
 
     /// <summary>
     /// A <see cref="List{Color}" /> of saved palette colors.
@@ -319,10 +322,10 @@ public class Settings : ModSettings
 
         Scribe_Values.Look(ref LineThickness, $"{nameof(BetterLinkableColors)}_{nameof(LineThickness)}", 0.2f);
 
-        Scribe_Values.Look(ref ActiveColor, $"{nameof(BetterLinkableColors)}_{nameof(ColorHelper.Defaults.ActiveColor)}", ColorHelper.Defaults.ActiveColor);
-        Scribe_Values.Look(ref InactiveColor, $"{nameof(BetterLinkableColors)}_{nameof(ColorHelper.Defaults.InactiveColor)}", ColorHelper.Defaults.InactiveColor);
-        Scribe_Values.Look(ref PotentialColor, $"{nameof(BetterLinkableColors)}_{nameof(ColorHelper.Defaults.PotentialColor)}", ColorHelper.Defaults.PotentialColor);
-        Scribe_Values.Look(ref OverriddenColor, $"{nameof(BetterLinkableColors)}_{nameof(ColorHelper.Defaults.OverriddenColor)}", ColorHelper.Defaults.OverriddenColor);
-        Scribe_Collections.Look(ref SavedPalette, $"{nameof(BetterLinkableColors)}_{nameof(ColorHelper.Defaults.ActiveColor)}", ctorArgs: MAX_PALETTES);
+        Scribe_Values.Look(ref ActiveColor, $"{nameof(BetterLinkableColors)}_{nameof(ActiveColor)}", ColorHelper.Defaults.ActiveColor);
+        Scribe_Values.Look(ref InactiveColor, $"{nameof(BetterLinkableColors)}_{nameof(InactiveColor)}", ColorHelper.Defaults.InactiveColor);
+        Scribe_Values.Look(ref PotentialColor, $"{nameof(BetterLinkableColors)}_{nameof(PotentialColor)}", ColorHelper.Defaults.PotentialColor);
+        Scribe_Values.Look(ref OverriddenColor, $"{nameof(BetterLinkableColors)}_{nameof(OverriddenColor)}", ColorHelper.Defaults.OverriddenColor);
+        Scribe_Collections.Look(ref SavedPalette, $"{nameof(BetterLinkableColors)}_{nameof(SavedPalette)}", ctorArgs: MAX_PALETTES);
     }
 }

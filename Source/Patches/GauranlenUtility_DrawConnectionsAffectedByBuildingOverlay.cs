@@ -1,0 +1,26 @@
+﻿using System.Collections.Generic;
+using System.Reflection.Emit;
+using Verse;
+using RimWorld;
+using HarmonyLib;
+// Ignore Spelling: Gauranlen, Plantable
+#if RIMWORLD_13_OR_GREATER
+namespace Drummeur.BetterLinkableColors.Patches;
+
+/// <summary>
+/// A <see cref="HarmonyPatch" /> to patch the <see cref="GauranlenUtility.DrawConnectionsAffectedByBuildingOverlay(Map, ThingDef, Faction, IntVec3, Rot4)" /> method.
+/// </summary>
+[HarmonyPatch(typeof(GauranlenUtility), nameof(GauranlenUtility.DrawConnectionsAffectedByBuildingOverlay))]
+public static class GauranlenUtility_DrawConnectionsAffectedByBuildingOverlay
+{
+    /// <summary>
+    /// A <see cref="HarmonyTranspiler" />.
+    /// </summary>
+    /// <param name="instructions">A collection of <see cref="CodeInstruction" />s representing the IL code of the original method.</param>
+    /// <returns>A collection of <see cref="CodeInstruction" />s representing the IL code of the new method.</returns>
+    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    {
+        return BetterLinkableColorsPatches.Patch_PostDrawExtraSelectionOverlays_For_Vtc3_Vtc3_SC_float(instructions, generator, BetterLinkableColorsPatches.InactiveLineField);
+    }
+}
+#endif
